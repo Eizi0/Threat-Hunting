@@ -2,12 +2,17 @@ title: LaunchAgent utilisateur imitant un composant Apple (com.apple.sysmond)
 id: 9c3a7f10-1d52-4be8-8e6a-7a4b2d9f6c15
 status: experimental
 description: >
-  Détecte la création de ~/Library/LaunchAgents/com.apple.sysmond.plist, le
-  nom utilisé par la persistance macOS de l'extension Claude Code 2.1.313
-  piégée. Apple ne dépose pas de composant com.apple.* dans le dossier
-  LaunchAgents d'un utilisateur : tout fichier de ce type écrit par un
-  processus d'éditeur ou un interpréteur est suspect. À généraliser en
-  surveillant tout « com.apple.* » créé hors /System et /Library.
+  Indicateur propre à cette campagne : création de
+  ~/Library/LaunchAgents/com.apple.sysmond.plist, le nom utilisé par la
+  persistance macOS de l'extension Claude Code 2.1.313 piégée selon OX
+  Security. Ce nom est un indicateur de campagne, pas une preuve générale :
+  un nom en domaine inversé « com.apple.* » ne prouve ni l'origine ni la
+  légitimité d'un fichier, dans un sens comme dans l'autre, et un attaquant
+  peut en changer. Une détection plus générale (non écrite ni testée ici)
+  combinerait le chemin (LaunchAgents de l'utilisateur), le nom, le contenu du
+  plist (ProgramArguments pointant vers ~/.config, RunAtLoad, KeepAlive), le
+  processus créateur (un éditeur de code ou un interpréteur plutôt qu'un
+  installateur) et l'absence de signature Apple sur le programme lancé.
 references:
   - https://opensourcemalware.com/blog/trojanized-claude-code-extension-plants-persistent-ssh-backdoor
   - https://www.ox.security/blog/malicious-claude-code-extension-cursor-ssh-backdoor/
@@ -25,5 +30,5 @@ detection:
     TargetFilename|endswith: '/com.apple.sysmond.plist'
   condition: selection
 falsepositives:
-  - Aucun connu pour ce nom précis.
+  - Aucun connu pour ce nom précis. Pour une généralisation à com.apple.*, des logiciels légitimes peuvent employer ce préfixe : validation nécessaire.
 level: high
