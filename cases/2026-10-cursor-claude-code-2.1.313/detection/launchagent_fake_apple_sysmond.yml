@@ -1,0 +1,29 @@
+title: LaunchAgent utilisateur imitant un composant Apple (com.apple.sysmond)
+id: 9c3a7f10-1d52-4be8-8e6a-7a4b2d9f6c15
+status: experimental
+description: >
+  Détecte la création de ~/Library/LaunchAgents/com.apple.sysmond.plist, le
+  nom utilisé par la persistance macOS de l'extension Claude Code 2.1.313
+  piégée. Apple ne dépose pas de composant com.apple.* dans le dossier
+  LaunchAgents d'un utilisateur : tout fichier de ce type écrit par un
+  processus d'éditeur ou un interpréteur est suspect. À généraliser en
+  surveillant tout « com.apple.* » créé hors /System et /Library.
+references:
+  - https://opensourcemalware.com/blog/trojanized-claude-code-extension-plants-persistent-ssh-backdoor
+  - https://www.ox.security/blog/malicious-claude-code-extension-cursor-ssh-backdoor/
+author: Eizi0
+date: 2026-10-30
+tags:
+  - attack.persistence
+  - attack.t1543.001
+logsource:
+  category: file_event
+  product: macos
+detection:
+  selection:
+    TargetFilename|contains: '/Library/LaunchAgents/'
+    TargetFilename|endswith: '/com.apple.sysmond.plist'
+  condition: selection
+falsepositives:
+  - Aucun connu pour ce nom précis.
+level: high

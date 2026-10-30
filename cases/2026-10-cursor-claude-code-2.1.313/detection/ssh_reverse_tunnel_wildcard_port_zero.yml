@@ -1,0 +1,38 @@
+title: Tunnel SSH inversé à port distant dynamique vers localhost:22
+id: 2b7d4e91-6c3a-4f58-9a1e-5d0c8f7b3a42
+status: experimental
+description: >
+  Détecte un client ssh ou autossh lancé avec une redirection inversée
+  « -R *:0:localhost:22 » : le serveur distant alloue un port aléatoire qui
+  rejoint le SSH local de la machine. C'est la ligne de commande décrite par
+  OpenSourceMalware et OX Security pour la porte dérobée de l'extension
+  Claude Code 2.1.313 (Cursor Marketplace, 2026-10-29). Un administrateur
+  légitime utilise rarement un port distant 0 avec un bind sur « * ».
+references:
+  - https://opensourcemalware.com/blog/trojanized-claude-code-extension-plants-persistent-ssh-backdoor
+  - https://www.ox.security/blog/malicious-claude-code-extension-cursor-ssh-backdoor/
+author: Eizi0
+date: 2026-10-30
+tags:
+  - attack.command-and-control
+  - attack.t1572
+  - attack.lateral-movement
+  - attack.t1021.004
+logsource:
+  category: process_creation
+  product: linux
+detection:
+  selection_bin:
+    Image|endswith:
+      - '/ssh'
+      - '/autossh'
+  selection_forward:
+    CommandLine|contains:
+      - ':0:localhost:22'
+      - ':0:127.0.0.1:22'
+  selection_flag:
+    CommandLine|contains: ' -R'
+  condition: selection_bin and selection_flag and selection_forward
+falsepositives:
+  - Un administrateur qui expose volontairement son SSH via un relais (rare, à documenter).
+level: high
