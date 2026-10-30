@@ -1,15 +1,23 @@
-title: Écriture dans authorized_keys détectée par une surveillance de fichier auditd
+title: Accès en écriture à authorized_keys remonté par une surveillance de fichier auditd
 id: 5e8b2c47-3f19-4a60-b7d3-1c9e0a6f8d24
 status: experimental
 description: >
-  Détecte une écriture dans ~/.ssh/authorized_keys remontée par auditd
-  (règle de surveillance « -w <fichier> -p wa »). Le chargeur de l'extension
-  Claude Code 2.1.313 ajoute sa clé « svc-telemetry » par une écriture de
-  fichier directe : en laboratoire, l'ajout n'a produit AUCUNE ligne de
-  commande contenant le nom de la clé (voir experiment-log.md, EXP-004), donc
-  une règle fondée sur la ligne de commande est aveugle. L'écriture seule est
-  le signal ; il faut ensuite corréler avec le processus (enregistrement
-  SYSCALL du même événement) pour écarter ssh-copy-id et les outils d'admin.
+  Base de surveillance, pas une détection finie. Elle repère un enregistrement
+  PATH sur ~/.ssh/authorized_keys produit par une règle auditd de surveillance
+  « -w <fichier> -p wa ». Un enregistrement PATH n'est PAS la preuve qu'une
+  écriture a réussi : en laboratoire, une tentative refusée par l'attribut
+  immuable produit le même PATH avec success=no dans le SYSCALL du même
+  événement (voir evidence/auditd-authorized-keys-events.log, événement 564).
+  Il faut donc corréler, via le numéro de série de l'événement, avec
+  l'enregistrement SYSCALL : success=yes, drapeaux d'ouverture en écriture
+  (a2 = 0x441 : O_WRONLY|O_CREAT|O_APPEND dans nos essais), puis exe, auid et
+  ppid pour écarter les ajouts légitimes. Cette corrélation dépend de votre
+  chaîne de collecte et de normalisation et doit être validée chez vous.
+  Le chargeur de l'extension Claude Code 2.1.313 ajoute sa clé « svc-telemetry »
+  par une écriture de fichier. Selon la façon dont l'écriture est lancée, la
+  ligne de commande peut ne pas contenir le nom de la clé (script lancé par
+  fichier : proctitle « bash » seul) ou le contenir (« bash -c ... » : événement
+  488) ; on ne peut donc pas s'appuyer sur elle.
 references:
   - https://www.ox.security/blog/malicious-claude-code-extension-cursor-ssh-backdoor/
 author: Eizi0
@@ -24,8 +32,14 @@ detection:
   selection:
     type: 'PATH'
     name|endswith: '/.ssh/authorized_keys'
+    nametype: 'NORMAL'
   condition: selection
 falsepositives:
-  - ssh-copy-id, outils de gestion de configuration (Ansible, Puppet), administrateurs.
-    À filtrer par exécutable du SYSCALL associé, après un apprentissage de la base.
+  - >
+    Ajout légitime par un administrateur ou un outil de gestion. En
+    laboratoire : sudo tee -a, exe=/usr/bin/tee, événement 501, success=yes,
+    indiscernable par le seul PATH.
+  - >
+    Tentatives d'écriture échouées (événement 564, success=no) : à écarter par
+    la corrélation avec le SYSCALL.
 level: medium
