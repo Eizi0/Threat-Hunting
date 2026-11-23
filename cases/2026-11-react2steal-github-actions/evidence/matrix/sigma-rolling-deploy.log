@@ -1,0 +1,15 @@
+== liste build1, journaux des builds 1 (15.5.6) et 2 (15.5.7)
+-- SELECT * FROM logs WHERE (method='POST' AND next_action REGEXP '.+') AND (NOT COALESCE((next_action='401f9e
+   5 correspondance(s)
+    matrix/15.5.6.log POST /form 500  | x
+    matrix/15.5.6.log POST /form 500  | 830a05144cd629dac4cc0fa950e1304a1d1c782dfc
+    matrix/15.5.7.log POST /form 500  | x
+    matrix/15.5.7.log POST /form 500  | 7c08a32ada5310077268fd5ebc6023bf09ade81ee1
+    matrix/15.5.7.log POST /form 500  | 40ffdd86d4da0381b8adc7516e77b4d050ad994ec6
+== liste build1+2, journaux des builds 1 (15.5.6) et 2 (15.5.7)
+-- SELECT * FROM logs WHERE (method='POST' AND next_action REGEXP '.+') AND (NOT COALESCE((next_action='401f9e
+   4 correspondance(s)
+    matrix/15.5.6.log POST /form 500  | x
+    matrix/15.5.6.log POST /form 500  | 830a05144cd629dac4cc0fa950e1304a1d1c782dfc
+    matrix/15.5.7.log POST /form 500  | x
+    matrix/15.5.7.log POST /form 500  | 7c08a32ada5310077268fd5ebc6023bf09ade81ee1

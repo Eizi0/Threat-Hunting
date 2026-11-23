@@ -1,0 +1,10 @@
+name: nextjs-action-ids
+priority: 10
+transformations:
+  - id: nextjs_action_ids
+    type: value_placeholders
+    include: [nextjs_action_ids]
+vars:
+  nextjs_action_ids:
+    - "401f9e489ce833169700815c10a1d0368b57aedd70"  # build rUUh7X1AOyOc6NTDvFvRp
+    - "40ffdd86d4da0381b8adc7516e77b4d050ad994ec6"  # build hn1UMPDzuXJhx5ROiIq_i
