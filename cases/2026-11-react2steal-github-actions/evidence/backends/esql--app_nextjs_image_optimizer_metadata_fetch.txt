@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where message like "*isn't a valid image for*" and (message like "*169.254.169.254*" or message like "*a9fe:a9fe*")

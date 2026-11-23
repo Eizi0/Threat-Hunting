@@ -1,0 +1,5 @@
+== splunk : 9 OK, 0 échec(s)
+== lucene : 9 OK, 0 échec(s)
+== esql : 9 OK, 0 échec(s)
+== loki : 9 OK, 0 échec(s)
+== sqlite : 9 OK, 0 échec(s)

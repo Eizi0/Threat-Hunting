@@ -1,0 +1,10 @@
+{"label": "dns", "attendu": "attaque", "log_format": "syslog", "event": "Nov 23 17:18:57 lab-vm dnsmasq[3164]: query[A] api.openai.com from 127.0.0.1"}
+{"label": "dns", "attendu": "attaque", "log_format": "syslog", "event": "Nov 23 17:18:57 lab-vm dnsmasq[3164]: query[AAAA] api.openai.com from 127.0.0.1"}
+{"label": "dns", "attendu": "attaque", "log_format": "syslog", "event": "Nov 23 17:18:57 lab-vm dnsmasq[3164]: query[A] api.anthropic.com from 127.0.0.1"}
+{"label": "dns", "attendu": "attaque", "log_format": "syslog", "event": "Nov 23 17:18:57 lab-vm dnsmasq[3164]: query[AAAA] api.anthropic.com from 127.0.0.1"}
+{"label": "dns", "attendu": "attaque", "log_format": "syslog", "event": "Nov 23 17:18:57 lab-vm dnsmasq[3164]: query[A] generativelanguage.googleapis.com from 127.0.0.1"}
+{"label": "dns", "attendu": "attaque", "log_format": "syslog", "event": "Nov 23 17:18:57 lab-vm dnsmasq[3164]: query[AAAA] generativelanguage.googleapis.com from 127.0.0.1"}
+{"label": "dns", "attendu": "attaque", "log_format": "syslog", "event": "Nov 23 17:18:57 lab-vm dnsmasq[3164]: query[A] api.deepseek.com from 127.0.0.1"}
+{"label": "dns", "attendu": "attaque", "log_format": "syslog", "event": "Nov 23 17:18:57 lab-vm dnsmasq[3164]: query[AAAA] api.deepseek.com from 127.0.0.1"}
+{"label": "dns", "attendu": "attaque", "log_format": "syslog", "event": "Nov 23 17:18:57 lab-vm dnsmasq[3164]: query[A] openrouter.ai from 127.0.0.1"}
+{"label": "dns", "attendu": "attaque", "log_format": "syslog", "event": "Nov 23 17:18:57 lab-vm dnsmasq[3164]: query[AAAA] openrouter.ai from 127.0.0.1"}

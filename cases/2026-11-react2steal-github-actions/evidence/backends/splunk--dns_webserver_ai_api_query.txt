@@ -1,0 +1,1 @@
+query IN ("*api.openai.com", "*api.anthropic.com", "*generativelanguage.googleapis.com", "*api.deepseek.com", "*openrouter.ai", "*api.groq.com", "*api.mistral.ai", "*api.perplexity.ai", "*api.together.xyz", "*dashscope.aliyuncs.com")

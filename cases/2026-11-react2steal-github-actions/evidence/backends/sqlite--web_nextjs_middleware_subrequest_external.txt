@@ -1,0 +1,1 @@
+SELECT * FROM logs WHERE x_middleware_subrequest REGEXP '.+'

@@ -1,0 +1,1 @@
+{job=~".+"} | logfmt | message=~`(?i).*isn't\ a\ valid\ image\ for.*` and (message=~`(?i).*169\.254\.169\.254.*` or message=~`(?i).*a9fe:a9fe.*`)

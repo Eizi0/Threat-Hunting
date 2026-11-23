@@ -1,0 +1,1 @@
+((method:POST AND next_action:/.+/) AND (NOT next_action:/^[0-9a-f]{40,42}$/)) OR content_type:*bissa_cve_boundary*

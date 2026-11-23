@@ -1,0 +1,1 @@
+message:*upstream\ image* AND message:*resolved\ to\ private\ ip*

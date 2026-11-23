@@ -1,0 +1,1 @@
+from * metadata _id, _index, _version | where message like "*upstream image*" and message like "*resolved to private ip*"

@@ -1,0 +1,1 @@
+SELECT * FROM logs WHERE (method='POST' AND next_action REGEXP '.+') AND (NOT COALESCE((next_action='401f9e489ce833169700815c10a1d0368b57aedd70'), 0))

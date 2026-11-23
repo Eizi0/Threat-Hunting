@@ -1,0 +1,1 @@
+uri:*\/_next\/image* AND (uri:(*169.254.169.254* OR *169%2E254%2E169%2E254* OR *%31%36%39%2E%32%35%34* OR *2852039166* OR *0xa9fea9fe* OR *a9fe\:a9fe* OR *fd00\:ec2\:\:254* OR *fd00%3Aec2%3A%3A254* OR *100.100.100.200* OR *metadata.google.internal*))

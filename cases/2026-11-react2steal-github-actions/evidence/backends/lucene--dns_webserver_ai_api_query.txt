@@ -1,0 +1,1 @@
+query:(*api.openai.com OR *api.anthropic.com OR *generativelanguage.googleapis.com OR *api.deepseek.com OR *openrouter.ai OR *api.groq.com OR *api.mistral.ai OR *api.perplexity.ai OR *api.together.xyz OR *dashscope.aliyuncs.com)

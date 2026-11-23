@@ -1,0 +1,1 @@
+{job=~".+"} | logfmt | message=~`(?i).*upstream\ image.*` and message=~`(?i).*resolved\ to\ private\ ip.*`

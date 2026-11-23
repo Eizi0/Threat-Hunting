@@ -1,0 +1,2 @@
+*
+| regex x_middleware_subrequest=".+"

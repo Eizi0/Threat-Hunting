@@ -1,0 +1,1 @@
+SELECT * FROM logs WHERE ((method='POST' AND next_action REGEXP '.+') AND (NOT COALESCE((next_action REGEXP '^[0-9a-f]{40,42}$'), 0))) OR content_type LIKE '%bissa\_cve\_boundary%' ESCAPE '\'

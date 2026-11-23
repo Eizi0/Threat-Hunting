@@ -1,0 +1,1 @@
+{job=~".+"} | logfmt | method=~`(?i)^POST$` and next_action=~`.+` and next_action!~`^[0-9a-f]{40,42}$` or content_type=~`(?i).*bissa_cve_boundary.*`

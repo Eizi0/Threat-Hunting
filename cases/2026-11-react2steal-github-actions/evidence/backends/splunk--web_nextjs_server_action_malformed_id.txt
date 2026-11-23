@@ -1,0 +1,6 @@
+
+| rex field=next_action "(?<next_actionMatch>.+)"
+| eval next_actionCondition=if(isnotnull(next_actionMatch), "true", "false")
+| rex field=next_action "(?<next_actionMatch2>^[0-9a-f]{40,42}$)"
+| eval next_actionCondition2=if(isnotnull(next_actionMatch2), "true", "false")
+| search (method="POST" next_actionCondition="true" NOT next_actionCondition2="true") OR content_type="*bissa_cve_boundary*"

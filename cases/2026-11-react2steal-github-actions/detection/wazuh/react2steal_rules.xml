@@ -1,0 +1,80 @@
+<!-- Traduction manuelle des règles Sigma React2STEAL pour Wazuh (pas de backend Sigma officiel pour Wazuh).
+     Testées avec wazuh-logtest ; identifiants 100700-100799 à adapter à votre plage locale. -->
+<group name="react2steal,nextjs,">
+
+  <!-- Journal du proxy en JSON (format json_detect) : décodé par le décodeur JSON natif -->
+  <rule id="100700" level="0">
+    <decoded_as>json</decoded_as>
+    <field name="uri">\.+</field>
+    <field name="method">\.+</field>
+    <description>Proxy web (format json_detect)</description>
+  </rule>
+
+  <rule id="100701" level="10">
+    <if_sid>100700</if_sid>
+    <field name="x_middleware_subrequest" type="pcre2">.+</field>
+    <description>Next.js : en-tête interne x-middleware-subrequest reçu d'un client (CVE-2025-29927)</description>
+    <mitre><id>T1190</id></mitre>
+  </rule>
+
+  <rule id="100702" level="10">
+    <if_sid>100700</if_sid>
+    <field name="uri" type="pcre2">/_next/image</field>
+    <field name="uri" type="pcre2">(?i)169\.254\.169\.254|169%2E254%2E169%2E254|%31%36%39%2E%32%35%34|2852039166|0xa9fea9fe|a9fe:a9fe|fd00:ec2::254|100\.100\.100\.200|metadata\.google\.internal</field>
+    <description>Next.js : optimiseur d'images pointé vers un service de métadonnées cloud</description>
+    <mitre><id>T1552.005</id></mitre>
+  </rule>
+
+  <!-- Liste des identifiants du build : à régénérer à chaque déploiement (extract-nextjs-action-ids.sh) -->
+  <rule id="100703" level="10">
+    <if_sid>100700</if_sid>
+    <field name="method">^POST$</field>
+    <field name="next_action" type="pcre2">.+</field>
+    <field name="next_action" type="pcre2" negate="yes">^(401f9e489ce833169700815c10a1d0368b57aedd70)$</field>
+    <description>Next.js : Server Action appelée avec un identifiant absent du build déployé ($(next_action))</description>
+    <mitre><id>T1190</id></mitre>
+  </rule>
+
+  <!-- Journal applicatif Next.js -->
+  <rule id="100710" level="12">
+    <decoded_as>nextjs-r2s</decoded_as>
+    <field name="nextjs_message" type="pcre2">isn't a valid image for .*(169\.254\.169\.254|a9fe:a9fe)</field>
+    <description>Next.js a réellement contacté un service de métadonnées cloud (SSRF)</description>
+    <mitre><id>T1552.005</id></mitre>
+  </rule>
+  <rule id="100711" level="7">
+    <decoded_as>nextjs-r2s</decoded_as>
+    <field name="nextjs_message" type="pcre2">upstream image .* resolved to private ip</field>
+    <description>Next.js 16 a bloqué une image vers une adresse privée (tentative de SSRF)</description>
+  </rule>
+  <rule id="100712" level="7">
+    <decoded_as>nextjs-r2s</decoded_as>
+    <field name="nextjs_message" type="pcre2">Failed to find Server Action|did not match the expected format</field>
+    <description>Next.js a refusé un identifiant de Server Action inconnu (scanner React2Shell)</description>
+  </rule>
+
+  <!-- auditd (log_format audit : enregistrements d'un même événement fusionnés). 80700 = règle audit de base de Wazuh -->
+  <rule id="100720" level="12">
+    <if_sid>80700</if_sid>
+    <field name="audit.exe" type="pcre2">/node$</field>
+    <field name="audit.file.name" type="pcre2">/\.aws/(credentials|config)|/serviceaccount/token|/\.kube/config|/\.config/gcloud/|/\.azure/|/\.docker/config\.json</field>
+    <description>Processus Node.js qui lit des identifiants cloud ou un jeton Kubernetes ($(audit.file.name))</description>
+    <mitre><id>T1552.001</id></mitre>
+  </rule>
+
+  <!-- DNS -->
+  <rule id="100730" level="7">
+    <decoded_as>dnsmasq-r2s</decoded_as>
+    <field name="dns_query" type="pcre2">(^|\.)(api\.openai\.com|api\.anthropic\.com|generativelanguage\.googleapis\.com|api\.deepseek\.com|openrouter\.ai|api\.groq\.com|api\.mistral\.ai|api\.perplexity\.ai|api\.together\.xyz|dashscope\.aliyuncs\.com)$</field>
+    <description>Résolution du domaine d'une API d'IA ($(dns_query)) : anormal sur un serveur web qui n'en utilise pas</description>
+    <mitre><id>T1526</id></mitre>
+  </rule>
+
+  <!-- Corrélation : lecture d'identifiants par node PUIS requête vers une API d'IA dans les 5 minutes -->
+  <rule id="100740" level="14" timeframe="300">
+    <if_sid>100730</if_sid>
+    <if_matched_sid>100720</if_matched_sid>
+    <description>Corrélation React2STEAL : identifiants cloud lus par node puis API d'IA contactée en moins de 5 minutes</description>
+    <mitre><id>T1552.001</id><id>T1526</id></mitre>
+  </rule>
+</group>

@@ -1,0 +1,1 @@
+SELECT * FROM logs WHERE message LIKE '%isn''t a valid image for%' ESCAPE '\' AND (message LIKE '%169.254.169.254%' ESCAPE '\' OR message LIKE '%a9fe:a9fe%' ESCAPE '\')

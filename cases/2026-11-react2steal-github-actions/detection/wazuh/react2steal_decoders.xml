@@ -1,0 +1,15 @@
+<!-- Décodeur dnsmasq (log-queries) pour le labo React2STEAL -->
+<decoder name="dnsmasq-r2s">
+  <program_name>^dnsmasq</program_name>
+</decoder>
+<decoder name="dnsmasq-r2s-query">
+  <parent>dnsmasq-r2s</parent>
+  <regex type="pcre2">^query\[(\S+)\] (\S+) from (\S+)</regex>
+  <order>dns_qtype,dns_query,srcip</order>
+</decoder>
+<!-- Journal Next.js (sortie du serveur, préfixée « nextjs: » par le collecteur) -->
+<decoder name="nextjs-r2s">
+  <prematch>^nextjs: </prematch>
+  <regex type="pcre2">^nextjs: (.+)$</regex>
+  <order>nextjs_message</order>
+</decoder>

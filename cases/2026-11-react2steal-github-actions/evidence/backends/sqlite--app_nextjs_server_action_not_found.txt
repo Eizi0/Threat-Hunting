@@ -1,0 +1,1 @@
+SELECT * FROM logs WHERE message LIKE '%The Server Reference ID did not match the expected format%' ESCAPE '\' OR message LIKE '%Failed to find Server Action%' ESCAPE '\'

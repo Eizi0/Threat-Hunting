@@ -1,0 +1,1 @@
+{job=~".+"} | logfmt | x_middleware_subrequest=~`.+`

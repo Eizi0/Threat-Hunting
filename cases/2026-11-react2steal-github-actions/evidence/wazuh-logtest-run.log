@@ -1,0 +1,48 @@
+===== session : input-full
+Règles déclenchées :
+    2        
+    7   1002 Unknown problem somewhere in the system.
+   31 100700 Proxy web (format json_detect)
+   19 100701 Next.js : en-tête interne x-middleware-subrequest reçu d'un client (CV
+   36 100702 Next.js : optimiseur d'images pointé vers un service de métadonnées cl
+   11 100703 Next.js : Server Action appelée avec un identifiant absent du build dé
+    7 100710 Next.js a réellement contacté un service de métadonnées cloud (SSRF)
+    8 100711 Next.js 16 a bloqué une image vers une adresse privée (tentative de SS
+    9 100712 Next.js a refusé un identifiant de Server Action inconnu (scanner Reac
+    2 100720 Processus Node.js qui lit des identifiants cloud ou un jeton Kubernete
+   10 100740 Corrélation React2STEAL : identifiants cloud lus par node puis API d'I
+   57  80700 Audit: Messages grouped.
+Bilan : {('app', 'FN'): 2, ('app', 'VP'): 24, ('app', 'hors périmètre'): 7, ('auditd', 'VN'): 57, ('auditd', 'VP'): 2, ('dns', 'VP'): 10, ('web', 'FN'): 20, ('web', 'FP'): 1, ('web', 'VN'): 11, ('web', 'VP'): 65}
+Faux négatifs / faux positifs :
+  FP web lab-baseline.log -> règle 100703 | {"time": "2026-11-23T14:56:23+00:00", "method": "POST", "uri": "/form", "status": 500, "ua": "curl/7.88.1", "content_typ
+  FN web matrix/15.5.6.log -> règle 100700 | {"time": "2026-11-23T15:35:40+00:00", "method": "POST", "uri": "/form", "status": 500, "ua": "curl/7.88.1", "content_typ
+  FN web variants/latest.log -> règle 100700 | {"time": "2026-11-23T16:32:49+00:00", "method": "GET", "uri": "/_next/image?url=http://imds-alias.lab/latest/meta-data/i
+  FN web variants/latest.log -> règle 100700 | {"time": "2026-11-23T16:32:49+00:00", "method": "GET", "uri": "/_next/image?url=http://127.0.0.5/r&w=64&q=75", "status":
+  FN web variants/latest.log -> règle 100700 | {"time": "2026-11-23T16:32:50+00:00", "method": "POST", "uri": "/form", "status": 200, "ua": "curl/7.88.1", "content_typ
+  FN web variants/latest.log -> règle 100700 | {"time": "2026-11-23T16:32:50+00:00", "method": "POST", "uri": "/form", "status": 200, "ua": "curl/7.88.1", "content_typ
+  FN web variants/latest.log -> règle 100700 | {"time": "2026-11-23T16:32:56+00:00", "method": "GET", "uri": "/_next/image?url=http://imds-alias.lab/latest/meta-data/i
+  FN web variants/latest.log -> règle 100700 | {"time": "2026-11-23T16:32:56+00:00", "method": "GET", "uri": "/_next/image?url=http://127.0.0.5/r&w=64&q=75", "status":
+  FN web variants/15.5.6.log -> règle 100700 | {"time": "2026-11-23T16:33:04+00:00", "method": "GET", "uri": "/_next/image?url=http://imds-alias.lab/latest/meta-data/i
+  FN web variants/15.5.6.log -> règle 100700 | {"time": "2026-11-23T16:33:04+00:00", "method": "GET", "uri": "/_next/image?url=http://127.0.0.5/r&w=64&q=75", "status":
+  FN web variants/15.5.6.log -> règle 100700 | {"time": "2026-11-23T16:33:04+00:00", "method": "POST", "uri": "/form", "status": 200, "ua": "curl/7.88.1", "content_typ
+  FN web variants/15.5.6.log -> règle 100700 | {"time": "2026-11-23T16:33:05+00:00", "method": "POST", "uri": "/form", "status": 200, "ua": "curl/7.88.1", "content_typ
+  FN web variants/15.5.6.log -> règle 100700 | {"time": "2026-11-23T16:33:05+00:00", "method": "POST", "uri": "/form", "status": 500, "ua": "curl/7.88.1", "content_typ
+  FN web variants/15.5.6.log -> règle 100700 | {"time": "2026-11-23T16:33:11+00:00", "method": "GET", "uri": "/_next/image?url=http://imds-alias.lab/latest/meta-data/i
+  FN web variants/15.5.6.log -> règle 100700 | {"time": "2026-11-23T16:33:11+00:00", "method": "GET", "uri": "/_next/image?url=http://127.0.0.5/r&w=64&q=75", "status":
+  FN web variants/16.1.7.log -> règle 100700 | {"time": "2026-11-23T16:33:17+00:00", "method": "GET", "uri": "/_next/image?url=http://imds-alias.lab/latest/meta-data/i
+  FN web variants/16.1.7.log -> règle 100700 | {"time": "2026-11-23T16:33:18+00:00", "method": "GET", "uri": "/_next/image?url=http://127.0.0.5/r&w=64&q=75", "status":
+  FN web variants/16.1.7.log -> règle 100700 | {"time": "2026-11-23T16:33:18+00:00", "method": "POST", "uri": "/form", "status": 500, "ua": "curl/7.88.1", "content_typ
+  FN web variants/16.1.7.log -> règle 100700 | {"time": "2026-11-23T16:33:18+00:00", "method": "POST", "uri": "/form", "status": 500, "ua": "curl/7.88.1", "content_typ
+  FN web variants/16.1.7.log -> règle 100700 | {"time": "2026-11-23T16:33:24+00:00", "method": "GET", "uri": "/_next/image?url=http://imds-alias.lab/latest/meta-data/i
+  FN web variants/16.1.7.log -> règle 100700 | {"time": "2026-11-23T16:33:24+00:00", "method": "GET", "uri": "/_next/image?url=http://127.0.0.5/r&w=64&q=75", "status":
+  FN app variants/15.5.6.log -> règle - | nextjs: ⨯ The requested resource isn't a valid image for http://imds-alias.lab/latest/meta-data/iam/security-credentials
+  FN app variants/15.5.6.log -> règle - | nextjs: ⨯ The requested resource isn't a valid image for http://127.0.0.5/r received null
+===== session : input-dns-only
+Règles déclenchées :
+    2 100730 Résolution du domaine d'une API d'IA (api.anthropic.com) : anormal sur
+    2 100730 Résolution du domaine d'une API d'IA (api.deepseek.com) : anormal sur 
+    2 100730 Résolution du domaine d'une API d'IA (api.openai.com) : anormal sur un
+    2 100730 Résolution du domaine d'une API d'IA (generativelanguage.googleapis.co
+    2 100730 Résolution du domaine d'une API d'IA (openrouter.ai) : anormal sur un 
+Bilan : {('dns', 'VP'): 10}
+Faux négatifs / faux positifs :

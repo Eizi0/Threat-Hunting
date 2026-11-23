@@ -1,0 +1,1 @@
+SELECT * FROM logs WHERE message LIKE '%upstream image%' ESCAPE '\' AND message LIKE '%resolved to private ip%' ESCAPE '\'
