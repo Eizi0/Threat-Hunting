@@ -1,0 +1,34 @@
+title: Appel de Server Action Next.js avec un identifiant absent du build déployé
+id: 5b9e2d47-3c1a-4f8e-9a6b-7d2c4e1f8a05
+status: experimental
+description: >
+  Sur une version vulnérable à CVE-2025-55182, n'importe quelle valeur de l'en-tête Next-Action atteint la
+  désérialisation vulnérable : aucun identifiant valide n'est nécessaire (vérifié en labo sur 14.2.24, 15.2.2,
+  15.5.6, 15.5.7 et 16.0.6 : réponse identique pour "x", un faux identifiant au bon format et le vrai).
+  Un contrôle sur le format est donc contournable. Cette règle compare la valeur à la liste exacte des
+  identifiants du build déployé, extraite de .next/server/server-reference-manifest.json par
+  extract-nextjs-action-ids.sh et injectée par le placeholder nextjs_action_ids (à régénérer à chaque déploiement).
+references:
+  - https://www.wiz.io/blog/nextjs-cve-2025-55182-react2shell-deep-dive
+  - https://opensourcemalware.com/blog/react2steal-github-actions
+author: Eizi0
+date: 2026-11-23
+tags:
+  - attack.initial-access
+  - attack.t1190
+  - cve.2025-55182
+logsource:
+  category: webserver
+definition: >
+  Journal du proxy avec l'en-tête Next-Action dans le champ next_action. Un journal par application :
+  la liste d'identifiants est propre à un build.
+detection:
+  selection:
+    method: 'POST'
+    next_action|re: '.+'
+  filter_known_actions:
+    next_action|expand: '%nextjs_action_ids%'
+  condition: selection and not filter_known_actions
+falsepositives:
+  - Clients restés sur une page d'un build précédent juste après un déploiement (Next.js le signale lui-même comme « older or newer deployment »). Garder les identifiants du build précédent pendant la période de transition.
+level: high

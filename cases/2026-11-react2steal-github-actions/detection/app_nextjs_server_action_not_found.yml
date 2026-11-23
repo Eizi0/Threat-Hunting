@@ -1,0 +1,30 @@
+title: Next.js refuse un identifiant de Server Action inconnu ou mal formé
+id: 9c3f7a21-4d8b-4e6a-b2c5-0e1f6a9d3b06
+status: experimental
+description: >
+  Les versions récentes de Next.js vérifient l'identifiant d'action avant de traiter la requête et
+  journalisent un refus (404 côté client). Observé en labo à partir de 15.5.8 (15.5.8, 15.5.9, 15.5.10, 15.5.29)
+  et sur 16.1.7 ; absent de 15.5.7 (premier correctif de CVE-2025-55182) et des versions vulnérables testées,
+  qui répondent 500 sans ce message. Le message sur le format n'apparaît que sur 15.5.29 parmi les versions testées.
+  Une rafale de ces messages signale un scanner React2Shell contre un serveur à jour.
+references:
+  - https://nextjs.org/docs/messages/failed-to-find-server-action
+  - https://opensourcemalware.com/blog/react2steal-github-actions
+author: Eizi0
+date: 2026-11-23
+tags:
+  - attack.reconnaissance
+  - attack.t1595.002
+  - cve.2025-55182
+logsource:
+  category: application
+  product: nextjs
+detection:
+  selection_format:
+    message|contains: 'The Server Reference ID did not match the expected format'
+  selection_unknown:
+    message|contains: 'Failed to find Server Action'
+  condition: 1 of selection_*
+falsepositives:
+  - '"Failed to find Server Action" seul : clients restés sur un ancien build juste après un déploiement. Le message de format, lui, ne devrait pas apparaître avec un client légitime.'
+level: medium

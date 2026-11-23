@@ -1,5 +1,5 @@
 """Exécute les requêtes SQL générées par sigma convert -t sqlite sur les journaux capturés en labo.
-Usage : python run-rules-on-lab-logs.py <dossier evidence> < requetes.sql"""
+Usage : python run-rules-on-lab-logs.py <dossier evidence> [fichiers relatifs...] < requetes.sql"""
 import json, re, sqlite3, sys
 from pathlib import Path
 ev = Path(sys.argv[1])
@@ -8,12 +8,13 @@ db.create_function("REGEXP", 2, lambda p, v: v is not None and re.search(p, v) i
 cols = ["src","time","method","uri","status","ua","content_type","next_action","x_action_id",
         "x_middleware_subrequest","transfer_encoding","message"]
 db.execute(f"CREATE TABLE logs ({','.join(cols)})")
-for f in ["lab-run-1.log", "lab-baseline.log", "lab-run-exp3.log"]:
+files = sys.argv[2:] or ["lab-run-1.log", "lab-baseline.log", "lab-run-exp3.log"]
+for f in files:
     for line in (ev / f).read_text().splitlines():
-        if line.startswith('{"time"'):
-            r = json.loads(line); r["src"] = f
+        if '{"time"' in line:
+            r = json.loads(line[line.index('{"time"'):]); r["src"] = f
             db.execute(f"INSERT INTO logs ({','.join(r)}) VALUES ({','.join('?'*len(r))})", list(r.values()))
-        elif "isn't a valid image" in line or "valid image" in line:
+        elif "next.log:" in line or "valid image" in line:
             db.execute("INSERT INTO logs (src, message) VALUES (?,?)", (f + " [next.js]", line.strip()))
 total = db.execute("SELECT count(*) FROM logs").fetchone()[0]
 print(f"{total} événements chargés\n")
