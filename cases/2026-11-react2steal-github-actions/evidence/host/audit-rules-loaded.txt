@@ -1,0 +1,7 @@
+-w /home/labweb/.aws/credentials -p r -k r2s_cloud_creds
+-w /home/labweb/.aws/config -p r -k r2s_cloud_creds
+-w /var/run/secrets/kubernetes.io/serviceaccount/token -p r -k r2s_k8s_token
+-w /srv/r2s-app/.env -p r -k r2s_dotenv
+-w /srv/r2s-app/.env.local -p r -k r2s_dotenv
+-a always,exit -F arch=b64 -S execve -F uid=1003 -F key=r2s_exec
+-a always,exit -F arch=b64 -S connect -F uid=1003 -F key=r2s_connect

@@ -1,0 +1,35 @@
+title: Serveur web qui résout le domaine d'une API d'IA qu'il n'utilise pas
+id: 7a1c9e52-3b4d-4f8a-9c6e-2d5b8f1a3e08
+status: experimental
+description: >
+  La collecte de React2STEAL teste les clés d'IA trouvées en appelant les API des fournisseurs depuis le serveur
+  victime. Sur un serveur web qui n'intègre pas ces API, une résolution de leur domaine est anormale. Vérifié en labo :
+  la collecte simulée produit une requête A et AAAA par fournisseur (journal dnsmasq), aucune pendant le trafic légitime.
+  À appliquer aux seuls serveurs web, avec une liste d'exceptions pour ceux qui utilisent légitimement ces API.
+references:
+  - https://opensourcemalware.com/blog/react2steal-github-actions
+author: Eizi0
+date: 2026-11-23
+tags:
+  - attack.discovery
+  - attack.t1526
+logsource:
+  category: dns
+definition: Journal DNS (résolveur ou serveur DNS) filtré sur les adresses des serveurs web exposés.
+detection:
+  selection:
+    query|endswith:
+      - 'api.openai.com'
+      - 'api.anthropic.com'
+      - 'generativelanguage.googleapis.com'
+      - 'api.deepseek.com'
+      - 'openrouter.ai'
+      - 'api.groq.com'
+      - 'api.mistral.ai'
+      - 'api.perplexity.ai'
+      - 'api.together.xyz'
+      - 'dashscope.aliyuncs.com'
+  condition: selection
+falsepositives:
+  - Application qui appelle réellement l'une de ces API (exclure ce serveur ou ce fournisseur).
+level: medium

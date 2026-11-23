@@ -1,0 +1,20 @@
+69 événements (auditd r2s_* + requêtes DNS)
+
+-- SELECT * FROM logs WHERE exe LIKE '%/node' ESCAPE '\' AND (name LIKE '%/.aws/credentials%' ESCAPE '\...
+   2 correspondance(s)
+    auditd SIMULATION /usr/bin/node /home/labweb/.aws/credentials  257
+    auditd SIMULATION /usr/bin/node /var/run/secrets/kubernetes.io/serviceaccount/token  257
+
+-- SELECT * FROM logs WHERE `query` LIKE '%api.openai.com' ESCAPE '\' OR `query` LIKE '%api.anthropic.c...
+   10 correspondance(s)
+    dns    api.openai.com A
+    dns    api.openai.com AAAA
+    dns    api.anthropic.com A
+    dns    api.anthropic.com AAAA
+    dns    generativelanguage.googleapis.com A
+    dns    generativelanguage.googleapis.com AAAA
+    dns    api.deepseek.com A
+    dns    api.deepseek.com AAAA
+    dns    openrouter.ai A
+    dns    openrouter.ai AAAA
+

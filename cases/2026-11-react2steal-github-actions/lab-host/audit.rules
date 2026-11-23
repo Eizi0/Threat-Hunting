@@ -1,0 +1,10 @@
+# Règles auditd du labo React2STEAL (clés r2s_*). Chemins du compte de service labweb.
+-w /home/labweb/.aws/credentials -p r -k r2s_cloud_creds
+-w /home/labweb/.aws/config -p r -k r2s_cloud_creds
+-w /var/run/secrets/kubernetes.io/serviceaccount/token -p r -k r2s_k8s_token
+-w /srv/r2s-app/.env -p r -k r2s_dotenv
+-w /srv/r2s-app/.env.local -p r -k r2s_dotenv
+# Processus lancés par le compte de service (montre qu'aucun shell n'est lancé)
+-a always,exit -F arch=b64 -S execve -F uid=labweb -k r2s_exec
+# Connexions sortantes du compte de service
+-a always,exit -F arch=b64 -S connect -F uid=labweb -k r2s_connect

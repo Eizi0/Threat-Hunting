@@ -1,0 +1,24 @@
+Nov 23 17:18:49 dnsmasq[3164]: demarré, version 2.90 (taille de cache 150)
+Nov 23 17:18:49 dnsmasq[3164]: options à la compilation : IPv6 GNU-getopt DBus no-UBus i18n IDN2 DHCP DHCPv6 no-Lua TFTP conntrack ipset nftset auth cryptohash DNSSEC loop-detect inotify dumpfile
+Nov 23 17:18:49 dnsmasq[3164]: utilise le serveur de nom LAN_IP#53
+Nov 23 17:18:49 dnsmasq[3164]: read /etc/hosts - 7 names
+Nov 23 17:18:57 dnsmasq[3164]: query[A] api.openai.com from 127.0.0.1
+Nov 23 17:18:57 dnsmasq[3164]: config api.openai.com is 127.0.0.9
+Nov 23 17:18:57 dnsmasq[3164]: query[AAAA] api.openai.com from 127.0.0.1
+Nov 23 17:18:57 dnsmasq[3164]: config api.openai.com is ::1
+Nov 23 17:18:57 dnsmasq[3164]: query[A] api.anthropic.com from 127.0.0.1
+Nov 23 17:18:57 dnsmasq[3164]: config api.anthropic.com is 127.0.0.9
+Nov 23 17:18:57 dnsmasq[3164]: query[AAAA] api.anthropic.com from 127.0.0.1
+Nov 23 17:18:57 dnsmasq[3164]: config api.anthropic.com is ::1
+Nov 23 17:18:57 dnsmasq[3164]: query[A] generativelanguage.googleapis.com from 127.0.0.1
+Nov 23 17:18:57 dnsmasq[3164]: config generativelanguage.googleapis.com is 127.0.0.9
+Nov 23 17:18:57 dnsmasq[3164]: query[AAAA] generativelanguage.googleapis.com from 127.0.0.1
+Nov 23 17:18:57 dnsmasq[3164]: config generativelanguage.googleapis.com is ::1
+Nov 23 17:18:57 dnsmasq[3164]: query[A] api.deepseek.com from 127.0.0.1
+Nov 23 17:18:57 dnsmasq[3164]: config api.deepseek.com is 127.0.0.9
+Nov 23 17:18:57 dnsmasq[3164]: query[AAAA] api.deepseek.com from 127.0.0.1
+Nov 23 17:18:57 dnsmasq[3164]: config api.deepseek.com is ::1
+Nov 23 17:18:57 dnsmasq[3164]: query[A] openrouter.ai from 127.0.0.1
+Nov 23 17:18:57 dnsmasq[3164]: config openrouter.ai is 127.0.0.9
+Nov 23 17:18:57 dnsmasq[3164]: query[AAAA] openrouter.ai from 127.0.0.1
+Nov 23 17:18:57 dnsmasq[3164]: config openrouter.ai is ::1
