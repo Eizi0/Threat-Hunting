@@ -80,3 +80,73 @@ Note d'outillage : `pysigma-backend-sqlite` ne s'installe pas avec ses dépendan
 **Bug trouvé par le test positif** : la première version terminait par `… | tee /dev/stderr | grep -q '[!]' && …`. `grep -q` s'arrête au premier résultat, `tee` reçoit SIGPIPE et, avec `set -o pipefail`, le pipeline échoue : **le dépôt infecté était déclaré sain**. Corrigé en capturant la sortie dans une variable avant le test.
 
 Limites : `--owner` non testé en positif (cela demanderait de créer un dépôt public piégé) ; un dépôt vide fait échouer l'appel d'arbre en silence ; le journal de sécurité du compte et les applications OAuth autorisées ne sont pas accessibles par cette API et restent à vérifier à la main.
+
+## EXP-008 : matrice de versions Next.js
+
+Méthode : `lab/Dockerfile.matrix` (versions passées en argument de build) et `lab/run-matrix.sh`, chaque version lancée deux fois (`default` puis `permissive`), toujours `--network none`. Preuves : `evidence/matrix/<version>.log`. Pour chaque version : identifiant d'action dans le HTML et dans `.next/server/server-reference-manifest.json`, contournement CVE-2025-29927, réponse à `Next-Action` = `x` / faux identifiant hexadécimal de 42 caractères / vrai identifiant (corps multipart inerte, boundary `bissa_cve_boundary`), SSRF `/_next/image`.
+
+| Version | ID d'action | 29927 (valeur ×5) | `x` | faux ID au bon format | vrai ID | SSRF défaut | SSRF permissif |
+|---|---|---|---|---|---|---|---|
+| 14.2.24 | 40 car. | **contourné** (200) | 500 | 500 | 500 | refusée, 0 req. | **1 req. IMDS**, aveugle |
+| 15.2.2 | 42 car. | **contourné** (200) | 500 | 500 | 500 | refusée, 0 req. | **1 req. IMDS**, aveugle |
+| 15.2.3 | 42 car. | bloqué (307) | 500 | 500 | 500 | refusée | **1 req. IMDS**, aveugle |
+| 15.5.6 | 42 car. | bloqué | 500 | 500 | 500 | refusée | **1 req. IMDS**, aveugle |
+| 15.5.7 | 42 car. | bloqué | 500 | 500 | 500 | refusée | **1 req. IMDS**, aveugle |
+| 15.5.8 | 42 car. | bloqué | **404** | **404** | 500 | non testé | non testé |
+| 15.5.9 | 42 car. | bloqué | **404** | **404** | 500 | non testé | non testé |
+| 15.5.10 | 42 car. | bloqué | **404** | **404** | 500 | non testé | non testé |
+| 15.5.29 | 42 car. | bloqué | **404** | **404** | 500 | refusée | **1 req. IMDS**, aveugle |
+| 16.0.6 | 42 car. | bloqué | 500 | 500 | 500 | refusée | **bloquée** : `resolved to private ip` |
+| 16.1.7 | 42 car. | bloqué | **404** | **404** | 500 | refusée | **bloquée** : `resolved to private ip` |
+
+Constats :
+1. Le manifeste de compilation contient exactement l'identifiant vu dans le HTML, sur toutes les versions.
+2. Jusqu'à 15.5.7 et en 16.0.6, `x`, un faux identifiant et le vrai reçoivent **la même réponse** : aucune vérification de l'action avant le traitement du corps. Cela concorde avec Wiz et Trend Micro (« any Next-Action value… triggers the vulnerable code path »). Une règle sur le format de l'identifiant est donc contournable.
+3. À partir de 15.5.8 (et en 16.1.7), un identifiant inconnu reçoit **404 « Server action not found »** et Next.js journalise `Failed to find Server Action "<id>"`. 15.5.29 journalise en plus `The Server Reference ID did not match the expected format` pour `x`. **15.5.7, pourtant premier correctif de CVE-2025-55182, se comporte encore comme les versions vulnérables** : le code 500 ne distingue pas un serveur vulnérable d'un serveur corrigé.
+4. Le vrai identifiant répond 500 partout : le corps inerte envoyé n'est pas un appel valide. Ce 500 ne dit rien de l'exploitabilité.
+5. SSRF : refusée en configuration par défaut partout ; avec `remotePatterns` permissif, la requête atteint le service de métadonnées en 14.2 et 15.x (réponse jamais renvoyée au client), mais est bloquée en 16.x avant tout envoi (`upstream image … resolved to private ip`).
+
+Limites : 14.2.24 n'est pas concernée par CVE-2025-55182 d'après les avis, son comportement identique sur un corps inerte ne dit rien de son exploitabilité ; 15.5.8 à 15.5.10 testées seulement en `default` ; versions intermédiaires entre 15.5.10 et 15.5.29 non testées pour le message de format.
+
+## EXP-009 : règle par liste d'identifiants du build
+
+`detection/extract-nextjs-action-ids.sh` lit le manifeste du build et produit un pipeline pySigma (`value_placeholders`) ; la règle `web_nextjs_server_action_unknown_id` l'utilise via `next_action|expand: '%nextjs_action_ids%'`. Test sur le journal 15.5.6 (pipeline généré depuis le vrai build : `evidence/matrix/nextjs-action-ids-15.5.6.pipeline.yml`, preuve `evidence/matrix/sigma-action-id-15.5.6.log`) :
+
+- règle par liste : 2 correspondances, `x` et le faux identifiant ; le vrai n'est pas signalé ;
+- ancienne règle sur le format : sa partie « format » ne voit que `x` ; le faux identifiant n'est pris que par la sélection « boundary de campagne », qu'une variante de React2STEAL rend aléatoire. Elle est rétrogradée en indicateur de campagne (`level: medium`).
+
+`app_nextjs_server_action_not_found` (journal applicatif), exécutée sur les journaux des 11 versions : 10 correspondances, exactement 2 par version de 15.5.8, 15.5.9, 15.5.10, 15.5.29 et 16.1.7 ; aucune sur 14.2.24, 15.2.2, 15.2.3, 15.5.6, 15.5.7, 16.0.6 (preuve `evidence/matrix/sigma-app-not-found.log`).
+
+## EXP-010 : télémétrie hôte de la collecte (auditd + DNS)
+
+Environnement : VM de labo Debian 12 (2 Go, processeur virtuel QEMU générique sans AVX), auditd, Node 22. Compte de service `labweb` ; application du labo en Next.js **15.5.6** (vulnérable) dans `/srv/r2s-app`, augmentée d'une route `lab-host/app-overlay/app/api/lab-sim/route.js`. Faux secrets : `.env`, `~labweb/.aws/credentials`, jeton Kubernetes factice. Trou noir DNS : `dnsmasq` (`lab-host/dnsmasq-r2s.conf`) qui répond 127.0.0.9 et ::1 pour les API d'IA, résolveur système pointé dessus pendant l'expérience. Règles auditd : `lab-host/audit.rules`. Script : `lab-host/run-host-exp.sh` ; analyse : `lab-host/analyze-audit.py`. Preuves : `evidence/host/`.
+
+**Principe** : aucune exploitation. La route de labo exécute **dans le processus Next.js lui-même** (même PID, même exécutable, même utilisateur, en cours de vie du serveur) les comportements décrits pour `fast_recon.js` : lecture de `process.env`, des identifiants cloud, du jeton Kubernetes et des `.env`, inventaire de `/proc` et `/proc/net/tcp`, test d'écriture de répertoires, puis appel des API de 5 fournisseurs d'IA avec l'agent utilisateur Chrome 126 et une clé factice. C'est la télémétrie qu'une exécution de code réelle produirait pour ces actions ; la phase d'exploitation elle-même n'est pas reproduite.
+
+Phases horodatées (`phases.txt`) : START (démarrage), BASELINE (pages, `/admin` avec cookie, soumission de la Server Action), SIMULATION (appel de la route), END.
+
+| Phase | Lectures surveillées | Processus lancés (`execve`) | Connexions hors serveur | Requêtes DNS |
+|---|---|---|---|---|
+| START | `.env` ×1 (Next.js charge `.env` au démarrage) | 28 (enveloppes `nohup`/`npx`/`env`/`dash`, puis `node`) | 0 | 0 |
+| BASELINE | 0 | 0 | 0 | 0 |
+| SIMULATION | `.aws/credentials`, jeton Kubernetes, `.env` (2ᵉ lecture) | **0** | 27 `connect` : 127.0.0.1:53 puis 127.0.0.9:443 et [::1]:443 | 10 (A + AAAA pour 5 domaines) |
+
+Constats :
+1. **Aucun processus lancé pendant la collecte** : les règles « node lance un shell » (Elastic, DFIRtnt n°1, Sigma courantes) ne voient rien de ce type de charge, comme l'indiquait Wiz pour les charges « Node-native ».
+2. **La lecture de l'environnement est invisible** : `process.env` est en mémoire (43 variables collectées, aucun appel système). C'est pourtant la source principale de secrets selon SRC-001.
+3. Visibles : lecture des fichiers d'identifiants (surveillance de fichier), requêtes DNS vers les API d'IA, connexions sortantes de `node` vers le port 443.
+4. `.env` est lu légitimement au démarrage : une règle « node lit .env » est bruyante ; c'est une **seconde lecture en cours de vie** qui est anormale (non exprimable simplement en Sigma, laissée en piste de chasse).
+5. Le titre de processus `next-server (v15.5.6)` apparaît dans les `PROCTITLE` d'auditd : utile pour inventorier les versions.
+
+Règles exécutées (SQLite, `detection/run-rules-on-host-logs.py`, preuve `evidence/host/sigma-host-run.log`, 69 événements) :
+- `lnx_auditd_node_reads_cloud_credentials` : 2 correspondances (identifiants AWS, jeton Kubernetes), toutes en SIMULATION ;
+- `dns_webserver_ai_api_query` : 10 correspondances, toutes en SIMULATION (aucune autre requête DNS pendant l'expérience).
+
+**Incidents et erreurs pendant la mise au point (tous corrigés, consignés pour transparence)** :
+- `next build` puis `next start` plantaient en « Bus error » : le binaire natif SWC (`@next/swc-linux-x64-gnu`) et `sharp` ne supportent pas le processeur virtuel QEMU générique de la VM. Build fait dans Docker (même base Debian 12, amd64) et copié ; SWC natif retiré pour le repli WebAssembly ; requête d'image retirée de la base VM.
+- `auditctl -R` ne chargeait **aucune** règle sans message d'erreur (fichier avec commentaires accentués) : chargement ligne par ligne, vérifié par `audit-rules-loaded.txt`.
+- `pkill -f "next start"` ne trouve pas le serveur, qui se renomme `next-server` ; et un `pkill -f "npm install"` a tué ma propre session SSH (motif présent dans sa ligne de commande).
+- **Un essai a envoyé des requêtes réelles vers l'extérieur** : un test rapide de la route, lancé alors que le résolveur avait été restauré, a appelé les 5 API d'IA réelles avec la clé `FAKE-LAB-KEY` (réponses 401, aucun vrai secret). Garde-fou ajouté à la route (refus en 503 si le résolveur n'est pas le trou noir local), testé.
+- **Trou noir IPv6 absent au premier passage** : seules les réponses A étaient détournées ; les AAAA partaient à l'amont et `node` a tenté 13 connexions IPv6 vers les vraies adresses, toutes en échec `ENETUNREACH` (pas de route IPv6 sur la VM, vérifié dans les `SYSCALL` : `success=no exit=-101`). Réponses `::1` ajoutées ; passage final : 0 requête transmise à l'amont.
+
+Limites : une seule version (15.5.6), base légitime courte, un seul serveur ; pas de vraie exploitation (la phase d'exécution de code initiale n'est pas observée) ; surveillance de `/proc` non posée ; journal DNS sans attribution au processus (la corrélation se fait par `connect` auditd).
