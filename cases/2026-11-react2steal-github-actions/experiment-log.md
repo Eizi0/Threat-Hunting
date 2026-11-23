@@ -150,3 +150,65 @@ Règles exécutées (SQLite, `detection/run-rules-on-host-logs.py`, preuve `evid
 - **Trou noir IPv6 absent au premier passage** : seules les réponses A étaient détournées ; les AAAA partaient à l'amont et `node` a tenté 13 connexions IPv6 vers les vraies adresses, toutes en échec `ENETUNREACH` (pas de route IPv6 sur la VM, vérifié dans les `SYSCALL` : `success=no exit=-101`). Réponses `::1` ajoutées ; passage final : 0 requête transmise à l'amont.
 
 Limites : une seule version (15.5.6), base légitime courte, un seul serveur ; pas de vraie exploitation (la phase d'exécution de code initiale n'est pas observée) ; surveillance de `/proc` non posée ; journal DNS sans attribution au processus (la corrélation se fait par `connect` auditd).
+
+## EXP-011 : résistance aux variations (évasion)
+
+Méthode : `lab/run-variants.sh` sur 15.2.2, 15.5.6 et 16.1.7, configurations `default` et `permissive`, toujours `--network none`. Ajouts dans le conteneur : un hôte « autorisé » (127.0.0.5) qui répond par une redirection 302 vers le service de métadonnées, et un nom `imds-alias.lab` qui résout vers 169.254.169.254 (`/etc/hosts`). Preuves : `evidence/variants/`.
+
+SSRF (7 variantes × 3 versions × 2 configurations) :
+
+| Variante | Atteint le service (14/15 permissif) | 16.x permissif | Règle URL avant durcissement | Règle URL après | Règle applicative 14/15 | Règle applicative 16.x |
+|---|---|---|---|---|---|---|
+| adresse directe | oui | bloquée | ✓ | ✓ | ✓ | ✓ |
+| décimale `2852039166` | oui | bloquée | ✗ | ✓ | ✓ (Next.js normalise) | ✓ |
+| hexadécimale `0xa9fea9fe` | oui | bloquée | ✗ | ✓ | ✓ (normalisée) | ✓ |
+| IPv6 mappée | oui | bloquée | ✓ | ✓ | ✓ (après ajout de `a9fe:a9fe`) | ✓ |
+| URL entièrement encodée | oui | bloquée | ✗ | ✓ | ✓ | ✓ |
+| nom DNS vers 169.254.169.254 | oui | bloquée | ✗ | **✗** | **✗** | ✓ |
+| redirection depuis un hôte autorisé | oui | bloquée | ✗ | **✗** | **✗** | ✓ |
+
+En configuration par défaut, toutes les variantes sont refusées (400) sur les trois versions. Exécution SQLite : `evidence/variants/sigma-variants-run.log`.
+
+Next-Action (configuration par défaut) : `NEXT-ACTION` (casse) est traité comme `Next-Action` ; `rsc-action-id: x` n'est pas traité comme une action par Next.js (200 HTML en 15.x) ; un **vrai identifiant lu dans le HTML de la page** reçoit la même réponse que `x` sur les versions vulnérables : la règle par liste du build ne le voit pas. En 16.1.7, un POST multipart sans en-tête d'action reçoit 500 et le journal `Failed to find Server Action.`
+
+Middleware (15.2.2 vulnérable) : une valeur préfixée `foo:middleware:…` (×5) **contourne** ; la casse du nom d'en-tête ne change rien (contournement) ; des espaces autour des `:` empêchent le contournement ; une sonde `x` ne contourne rien mais échappait à la règle (qui cherchait `middleware`).
+
+Modifications des règles qui en découlent : middleware → toute valeur non vide ; URL SSRF → formes décimale, hexadécimale, IPv6 mappée et encodée ; applicative SSRF → `a9fe:a9fe` ; nouvelle règle `app_nextjs_image_private_ip_blocked` (16.x). Non-régression rejouée sur le jeu initial : mêmes résultats (`evidence/sigma-sqlite-run.log`).
+
+## EXP-012 : trafic réel (journal Traefik du serveur du blog)
+
+Jeu : journal d'accès JSON de Traefik d'un serveur personnel exposé (site statique, pas de Next.js), **777 087 requêtes du 18/12/2025 au 23/11/2026**. Analyse faite sur le serveur, seuls des agrégats sont sortis (aucune adresse IP, aucun hôte). Les en-têtes de requête ne sont pas journalisés : seules les règles fondées sur l'URL sont applicables.
+
+- Règle `web_nextjs_image_ssrf_cloud_metadata` : **0 correspondance** (ni vrai ni faux positif). 8 requêtes `/_next/image?url=` vues, toutes vers des chemins relatifs (404/301).
+- 102 clients distincts ont sondé des chemins `/_next/` (site sans Next.js) : `/_next/server`, `/_next/../.env`, `/_next/static/…/.env`, `/_next/../.aws/credentials`, `/_next/../.azure/credentials`, `/_next/data/*/…json`, `main.js.map`.
+- 2 244 requêtes portent une adresse de métadonnées **hors** de `/_next/image` (21 clients, surtout août-septembre 2026) : paramètres génériques `/fetch?url=`, `/proxy?url=`, `/api/fetch?url=`, `/webhook?url=`, `/redirect?url=`… Statuts : 1 613 × 404, 615 × 301, **16 × 200**.
+- Les 16 réponses 200 sont toutes la **page d'accueil** (`/`, 5 992 octets) servie avec un paramètre ignoré : un statut 200 sur une requête d'attaque ne prouve pas son succès.
+- POST par mois : de 700 à 4 583, sans pic exploitable en décembre 2025 (journal commencé le 18/12).
+
+## EXP-013 : backends Sigma, Wazuh et corrélation
+
+Conversion des 9 règles (pySigma) vers Splunk, Elasticsearch Lucene, ES|QL, Loki et SQLite : **9/9 sans erreur pour chaque backend** (`evidence/backends/`). C'est une compatibilité de syntaxe : seule l'exécution SQLite est réellement testée, et les noms de champs devront être adaptés au modèle de chaque SIEM. Piège : sous zsh, un tableau d'options passé dans une variable non découpée faisait échouer la conversion avec un message trompeur (« pipeline not found »).
+
+**Wazuh** : pas de backend Sigma officiel. Traduction manuelle en `detection/wazuh/react2steal_rules.xml` (+ décodeurs dnsmasq et Next.js), validée par `wazuh-analysisd -t` puis **exécutée** dans `wazuh/wazuh-manager:4.12.0` (conteneur sans réseau) via le socket `wazuh-logtest` (`detection/wazuh/run-logtest.py`). Jeu : 199 événements étiquetés construits depuis les preuves (`detection/wazuh/build-input.py`) ; vérité terrain = origine de la requête (sonde du labo ou trafic légitime), pas la règle testée. Preuve : `evidence/wazuh-logtest-run.log`.
+
+| Source | VP | FN | FP | VN | Hors périmètre |
+|---|---|---|---|---|---|
+| web (proxy) | 65 | 20 | 1 | 11 | — |
+| application | 24 | 2 | 0 | — | 7 (lignes de continuation, « Connection closed ») |
+| auditd | 2 | 0 | 0 | 57 | — |
+| DNS | 10 | 0 | 0 | — | — |
+
+- FN web : nom DNS et redirection (12, attendus), POST sans `Next-Action` (6, sondes qui n'atteignent pas le traitement d'action en 15.x), vrai identifiant (2, attendu).
+- FP web : l'appel légitime de la base, fait sur un build **15.2.2**, est signalé car la liste Wazuh contient l'identifiant du build **15.5.6** : c'est le problème d'association événement ↔ manifeste (voir EXP-014).
+- FN application : nom DNS et redirection en 15.x (attendus).
+- **Corrélation** (règle 100740, `if_sid` DNS + `if_matched_sid` lecture d'identifiants, fenêtre 300 s) : dans la session complète, les 10 requêtes DNS qui suivent la lecture d'identifiants montent au niveau 14 ; dans une session témoin contenant seulement les requêtes DNS, elles restent au niveau 7 (règle 100730). Limite : en production, la corrélation suppose que l'auditd et le DNS remontent du même agent ; avec un résolveur central, il faut une clé commune (adresse source).
+- Erreurs de mise au point corrigées : la règle de niveau 0 qui reconnaît le format JSON était comptée comme alerte ; les lignes dnsmasq sans nom d'hôte n'étaient pas décodées (le format syslog réel l'inclut) ; étiquetage initial qui classait des sondes comme légitimes d'après la règle testée.
+
+## EXP-014 : liste d'identifiants et déploiement progressif
+
+`extract-nextjs-action-ids.sh` accepte désormais plusieurs builds (union, chaque identifiant annoté de son `BUILD_ID`). Test avec les manifestes réels des builds 15.5.6 (`401f9e…`) et 15.5.7 (`40ffdd…`) sur les journaux des deux versions (`evidence/matrix/sigma-rolling-deploy.log`) :
+
+- liste du seul build 1 : le **vrai** identifiant du build 2 est signalé à tort (faux positif de déploiement progressif) ;
+- union des deux builds : plus de faux positif ; `x` et les faux identifiants restent détectés.
+
+Pistes d'industrialisation (non testées) : journaliser l'instance amont (`$upstream_addr` sous nginx) pour associer chaque requête au manifeste de l'instance qui l'a traitée ; ou configurer `deploymentId` dans Next.js et journaliser l'en-tête de version envoyé par le client ; générer la liste dans la chaîne de déploiement et la publier vers le SIEM avec l'artefact.

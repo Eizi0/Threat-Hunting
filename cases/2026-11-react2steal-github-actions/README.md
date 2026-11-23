@@ -8,10 +8,10 @@ Analyse de la campagne décrite par OpenSourceMalware le 18 novembre 2026 : des 
 
 - `sources.md` : sources lues, ce qui n'a pas été lu et pourquoi (les dépôts de la campagne n'ont pas été consultés)
 - `claims.md` : affirmations et niveau de preuve
-- `experiment-log.md` : 10 expériences (labo Docker isolé, matrice de 11 versions de Next.js, télémétrie hôte auditd + DNS sur VM)
+- `experiment-log.md` : 14 expériences (labo Docker isolé, matrice de 11 versions de Next.js, variantes d'évasion, télémétrie hôte auditd + DNS sur VM, trafic réel, backends Sigma et Wazuh)
 - `lab/` : laboratoire Docker (Dockerfile, `Dockerfile.matrix` pour les versions, application minimale, nginx, scripts). Aucune charge d'exploitation.
 - `lab-host/` : laboratoire hôte (route de simulation de la collecte, règles auditd, trou noir DNS, script et analyseur)
-- `detection/` : 8 règles Sigma exécutées sur les journaux du labo, le générateur de liste d'identifiants d'action, les exécuteurs SQLite, un script de vérification GitHub en lecture seule
+- `detection/` : 9 règles Sigma exécutées sur les journaux du labo, leur traduction Wazuh (`wazuh/`, testée dans wazuh-logtest avec une règle de corrélation), le générateur de liste d'identifiants d'action (plusieurs builds), les exécuteurs SQLite, un script de vérification GitHub en lecture seule
 - `evidence/` : journaux bruts du labo, indicateurs
 
 ## Résultats principaux
@@ -21,12 +21,14 @@ Analyse de la campagne décrite par OpenSourceMalware le 18 novembre 2026 : des 
 3. La SSRF vers les métadonnées cloud échoue en configuration par défaut sur toutes les versions testées, reste aveugle en 14.2/15.x avec une configuration permissive (trace explicite dans le journal de l'application), et est bloquée en 16.x.
 4. Sur une version vulnérable, n'importe quelle valeur de `Next-Action` est traitée : une règle sur le format de l'identifiant est contournable. La comparaison à la liste des identifiants du build (manifeste) ne l'est pas.
 5. À partir de 15.5.8, un identifiant inconnu reçoit 404 et un message explicite ; 15.5.7, premier correctif, répond encore 500 comme les versions vulnérables.
-6. La collecte dans le processus Node.js ne lance aucun processus et la lecture de l'environnement est invisible : seules les lectures de fichiers d'identifiants et les requêtes DNS vers les API d'IA se voient.
-7. Le test positif du script de vérification a révélé un bug (`pipefail` + `grep -q`) qui faisait passer un dépôt compromis pour sain.
+6. Dans ma simulation de la collecte de type fast_recon.js, aucun processus n'est lancé et la lecture de l'environnement est invisible : seules les lectures de fichiers d'identifiants et les requêtes DNS vers les API d'IA se voient. D'autres exploitations de React2Shell lancent des shells.
+7. Variantes d'évasion : nom DNS et redirection échappent aux règles fondées sur l'URL ; un vrai identifiant lu dans le HTML échappe à la liste du build ; 16.x bloque et journalise toutes les variantes de SSRF testées.
+8. Sur 777 087 requêtes réelles (site statique), la règle SSRF n'a produit aucun faux positif ; 16 requêtes d'attaque ont reçu un 200 qui n'était que la page d'accueil.
+9. Le test positif du script de vérification a révélé un bug (`pipefail` + `grep -q`) qui faisait passer un dépôt compromis pour sain.
 
 ## Limites
 
-Faux service de métadonnées, pas d'IMDSv2, pas de vraie exploitation (la collecte est simulée dans le processus), petits échantillons de trafic légitime, mode `--owner` du script non testé en positif. Erreurs et incidents de mise au point consignés dans `experiment-log.md`.
+Faux service de métadonnées, pas d'IMDSv2, pas de vraie exploitation (la collecte est simulée dans le processus), petits échantillons de trafic légitime (le trafic réel ne couvre que les règles fondées sur l'URL), conversions vers Splunk/Elastic/Loki vérifiées en syntaxe seulement, mode `--owner` du script non testé en positif. Erreurs et incidents de mise au point consignés dans `experiment-log.md`.
 
 ## Reproduire le labo
 
