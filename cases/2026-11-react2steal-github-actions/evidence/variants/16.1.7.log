@@ -1,0 +1,57 @@
+16.1.7 référence SSRF référence 400 IMDS+0 "url" parameter is not allowed
+16.1.7 décimal   SSRF décimal 400 IMDS+0 "url" parameter is not allowed
+16.1.7 hexa       SSRF hexa 400 IMDS+0 "url" parameter is not allowed
+16.1.7 ipv6-mappée SSRF ipv6-mappée 400 IMDS+0 "url" parameter is not allowed
+16.1.7 tout-encodé SSRF tout-encodé 400 IMDS+0 "url" parameter is not allowed
+16.1.7 nom-DNS    SSRF nom-DNS 400 IMDS+0 "url" parameter is not allowed
+16.1.7 redirection SSRF redirection 400 IMDS+0 "url" parameter is not allowed
+16.1.7 default    ACTION sans en-tête                500 Internal Server Error
+16.1.7 default    ACTION rsc-action-id: x             500 Internal Server Error
+16.1.7 default    ACTION NEXT-ACTION: x (casse)       404 Server action not found.
+16.1.7 default    ACTION vrai ID lu dans le HTML      500 0:{"a":"$@1","f":"","b":"7xj_lq_4dAWPrJP
+16.1.7 default    MW valeur 'x' (sonde)               307 bloqué
+16.1.7 default    MW préfixe + 5x                    307 bloqué
+16.1.7 default    MW espaces                          307 bloqué
+16.1.7 default    MW casse du nom d'en-tête          307 bloqué
+16.1.7 default next.log: ⨯ Error: Failed to find Server Action. This request might be from an older or newer deployment.
+16.1.7 default next.log: ⨯ Error: Failed to find Server Action. This request might be from an older or newer deployment.
+16.1.7 default next.log: ⨯ Error: Failed to find Server Action. This request might be from an older or newer deployment.
+16.1.7 default next.log: ⨯ Error: Failed to find Server Action. This request might be from an older or newer deployment.
+16.1.7 default next.log: Error: Failed to find Server Action "x". This request might be from an older or newer deployment.
+16.1.7 default nginx: {"time":"2026-11-23T16:33:16+00:00","method":"GET","uri":"/_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T16:33:16+00:00","method":"GET","uri":"/_next/image?url=http://2852039166/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T16:33:16+00:00","method":"GET","uri":"/_next/image?url=http://0xa9fea9fe/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T16:33:17+00:00","method":"GET","uri":"/_next/image?url=http://[::ffff:169.254.169.254]/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T16:33:17+00:00","method":"GET","uri":"/_next/image?url=%68%74%74%70%3a%2f%2f%31%36%39%2e%32%35%34%2e%31%36%39%2e%32%35%34%2f%6c%61%74%65%73%74%2f&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T16:33:17+00:00","method":"GET","uri":"/_next/image?url=http://imds-alias.lab/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T16:33:18+00:00","method":"GET","uri":"/_next/image?url=http://127.0.0.5/r&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T16:33:18+00:00","method":"GET","uri":"/form","status":200,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T16:33:18+00:00","method":"POST","uri":"/form","status":500,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=b","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T16:33:18+00:00","method":"POST","uri":"/form","status":500,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=b","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T16:33:18+00:00","method":"POST","uri":"/form","status":404,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=b","next_action":"x","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T16:33:18+00:00","method":"POST","uri":"/form","status":500,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=b","next_action":"40a72e68cf93032644da6bb17eeae3bbeea3da1e3e","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T16:33:18+00:00","method":"GET","uri":"/admin","status":307,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"x","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T16:33:18+00:00","method":"GET","uri":"/admin","status":307,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"foo:middleware:middleware:middleware:middleware:middleware","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T16:33:18+00:00","method":"GET","uri":"/admin","status":307,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"middleware : middleware : middleware : middleware : middleware","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T16:33:18+00:00","method":"GET","uri":"/admin","status":307,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"middleware:middleware:middleware:middleware:middleware","transfer_encoding":""}
+16.1.7 référence SSRF référence 400 IMDS+0 "url" parameter is not allowed
+16.1.7 décimal   SSRF décimal 400 IMDS+0 "url" parameter is not allowed
+16.1.7 hexa       SSRF hexa 400 IMDS+0 "url" parameter is not allowed
+16.1.7 ipv6-mappée SSRF ipv6-mappée 400 IMDS+0 "url" parameter is not allowed
+16.1.7 tout-encodé SSRF tout-encodé 400 IMDS+0 "url" parameter is not allowed
+16.1.7 nom-DNS    SSRF nom-DNS 400 IMDS+0 "url" parameter is not allowed
+16.1.7 redirection SSRF redirection 400 IMDS+0 "url" parameter is not allowed
+16.1.7 permissive next.log: ⨯ upstream image http://169.254.169.254/latest/meta-data/iam/security-credentials/ resolved to private ip ["169.254.169.254"]
+16.1.7 permissive next.log: ⨯ upstream image http://169.254.169.254/latest/meta-data/iam/security-credentials/ resolved to private ip ["169.254.169.254"]
+16.1.7 permissive next.log: ⨯ upstream image http://169.254.169.254/latest/meta-data/iam/security-credentials/ resolved to private ip ["169.254.169.254"]
+16.1.7 permissive next.log: ⨯ upstream image http://[::ffff:a9fe:a9fe]/latest/meta-data/iam/security-credentials/ resolved to private ip ["[::ffff:a9fe:a9fe]"]
+16.1.7 permissive next.log: ⨯ upstream image http://169.254.169.254/latest/ resolved to private ip ["169.254.169.254"]
+16.1.7 permissive next.log: ⨯ upstream image http://imds-alias.lab/latest/meta-data/iam/security-credentials/ resolved to private ip ["169.254.169.254"]
+16.1.7 permissive next.log: ⨯ upstream image http://127.0.0.5/r resolved to private ip ["127.0.0.5"]
+16.1.7 permissive nginx: {"time":"2026-11-23T16:33:22+00:00","method":"GET","uri":"/_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 permissive nginx: {"time":"2026-11-23T16:33:23+00:00","method":"GET","uri":"/_next/image?url=http://2852039166/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 permissive nginx: {"time":"2026-11-23T16:33:23+00:00","method":"GET","uri":"/_next/image?url=http://0xa9fea9fe/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 permissive nginx: {"time":"2026-11-23T16:33:23+00:00","method":"GET","uri":"/_next/image?url=http://[::ffff:169.254.169.254]/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 permissive nginx: {"time":"2026-11-23T16:33:24+00:00","method":"GET","uri":"/_next/image?url=%68%74%74%70%3a%2f%2f%31%36%39%2e%32%35%34%2e%31%36%39%2e%32%35%34%2f%6c%61%74%65%73%74%2f&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 permissive nginx: {"time":"2026-11-23T16:33:24+00:00","method":"GET","uri":"/_next/image?url=http://imds-alias.lab/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 permissive nginx: {"time":"2026-11-23T16:33:24+00:00","method":"GET","uri":"/_next/image?url=http://127.0.0.5/r&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
