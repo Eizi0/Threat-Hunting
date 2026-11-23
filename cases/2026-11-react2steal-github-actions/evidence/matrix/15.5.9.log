@@ -1,0 +1,19 @@
+15.5.9   default     id d'action (html)                 408900a9997d5155b3d1ec1650622e96f1695f542e (42 car.)
+15.5.9   default     id d'action (manifeste)            408900a9997d5155b3d1ec1650622e96f1695f542e
+15.5.9   default     29927 valeur x5                    307 bloqué
+15.5.9   default     29927 valeur x1                    307
+15.5.9   default     Next-Action x… (1 car.)          404 Server action not found.
+15.5.9   default     Next-Action 7fde86… (42 car.) faux 404 Server action not found.
+15.5.9   default     Next-Action 408900… (42 car.) réel 500 0:{"a":"$@1","f":"","b":"w_t1ZlOgqyqKX3hEQUQt5"}1:E{"digest":"2782339
+15.5.9   default     SSRF image                         400 "url" parameter is not allowed | IMDS: 0 req.
+15.5.9 default next.log: [Error: Failed to find Server Action "x". This request might be from an older or newer deployment.
+15.5.9 default next.log: Read more: https://nextjs.org/docs/messages/failed-to-find-server-action]
+15.5.9 default next.log: [Error: Failed to find Server Action "7fde869b4dbb259d58f736cd88819ace93ab304be4". This request might be from an older or newer deployment.
+15.5.9 default next.log: Read more: https://nextjs.org/docs/messages/failed-to-find-server-action]
+15.5.9 default nginx: {"time":"2026-11-23T15:52:13+00:00","method":"GET","uri":"/form","status":200,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+15.5.9 default nginx: {"time":"2026-11-23T15:52:13+00:00","method":"GET","uri":"/admin","status":307,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"middleware:middleware:middleware:middleware:middleware","transfer_encoding":""}
+15.5.9 default nginx: {"time":"2026-11-23T15:52:13+00:00","method":"GET","uri":"/admin","status":307,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"middleware","transfer_encoding":""}
+15.5.9 default nginx: {"time":"2026-11-23T15:52:13+00:00","method":"POST","uri":"/form","status":404,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=bissa_cve_boundary","next_action":"x","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+15.5.9 default nginx: {"time":"2026-11-23T15:52:13+00:00","method":"POST","uri":"/form","status":404,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=bissa_cve_boundary","next_action":"7fde869b4dbb259d58f736cd88819ace93ab304be4","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+15.5.9 default nginx: {"time":"2026-11-23T15:52:13+00:00","method":"POST","uri":"/form","status":500,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=bissa_cve_boundary","next_action":"408900a9997d5155b3d1ec1650622e96f1695f542e","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+15.5.9 default nginx: {"time":"2026-11-23T15:52:13+00:00","method":"GET","uri":"/_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}

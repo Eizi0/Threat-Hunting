@@ -1,0 +1,22 @@
+16.1.7   default     id d'action (html)                 40a72e68cf93032644da6bb17eeae3bbeea3da1e3e (42 car.)
+16.1.7   default     id d'action (manifeste)            40a72e68cf93032644da6bb17eeae3bbeea3da1e3e
+16.1.7   default     29927 valeur x5                    307 bloqué
+16.1.7   default     29927 valeur x1                    307
+16.1.7   default     Next-Action x… (1 car.)          404 Server action not found.
+16.1.7   default     Next-Action c2cdad… (42 car.) faux 404 Server action not found.
+16.1.7   default     Next-Action 40a72e… (42 car.) réel 500 0:{"a":"$@1","f":"","b":"7xj_lq_4dAWPrJP0V5yos","q":"","i":false}1:E{
+16.1.7   default     SSRF image                         400 "url" parameter is not allowed | IMDS: 0 req.
+16.1.7 default next.log: Error: Failed to find Server Action "x". This request might be from an older or newer deployment.
+16.1.7 default next.log: Read more: https://nextjs.org/docs/messages/failed-to-find-server-action
+16.1.7 default next.log: Error: Failed to find Server Action "c2cdad2248497aaef06c09136e25916527193f5d01". This request might be from an older or newer deployment.
+16.1.7 default next.log: Read more: https://nextjs.org/docs/messages/failed-to-find-server-action
+16.1.7 default nginx: {"time":"2026-11-23T15:35:18+00:00","method":"GET","uri":"/form","status":200,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T15:35:18+00:00","method":"GET","uri":"/admin","status":307,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"middleware:middleware:middleware:middleware:middleware","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T15:35:18+00:00","method":"GET","uri":"/admin","status":307,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"middleware","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T15:35:18+00:00","method":"POST","uri":"/form","status":404,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=bissa_cve_boundary","next_action":"x","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T15:35:18+00:00","method":"POST","uri":"/form","status":404,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=bissa_cve_boundary","next_action":"c2cdad2248497aaef06c09136e25916527193f5d01","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T15:35:18+00:00","method":"POST","uri":"/form","status":500,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=bissa_cve_boundary","next_action":"40a72e68cf93032644da6bb17eeae3bbeea3da1e3e","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7 default nginx: {"time":"2026-11-23T15:35:18+00:00","method":"GET","uri":"/_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+16.1.7   permissive  SSRF image                         400 "url" parameter is not allowed | IMDS: 0 req.
+16.1.7 permissive next.log: ⨯ upstream image http://169.254.169.254/latest/meta-data/iam/security-credentials/ resolved to private ip ["169.254.169.254"]
+16.1.7 permissive nginx: {"time":"2026-11-23T15:35:22+00:00","method":"GET","uri":"/_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}

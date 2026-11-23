@@ -1,0 +1,13 @@
+10 événements chargés
+
+-- SELECT * FROM logs WHERE (method='POST' AND next_action REGEXP '.+') AND (NOT COALESCE((next_action='401f9e489...
+   2 correspondance(s)
+    matrix/15.5.6.log POST /form 500  | x
+    matrix/15.5.6.log POST /form 500  | 830a05144cd629dac4cc0fa950e1304a1d1c782dfc
+
+-- SELECT * FROM logs WHERE ((method='POST' AND next_action REGEXP '.+') AND (NOT COALESCE((next_action REGEXP '^...
+   3 correspondance(s)
+    matrix/15.5.6.log POST /form 500  | x
+    matrix/15.5.6.log POST /form 500  | 830a05144cd629dac4cc0fa950e1304a1d1c782dfc
+    matrix/15.5.6.log POST /form 500  | 401f9e489ce833169700815c10a1d0368b57aedd70
+
