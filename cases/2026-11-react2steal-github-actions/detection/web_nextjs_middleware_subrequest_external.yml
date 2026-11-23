@@ -1,0 +1,32 @@
+title: En-tête interne x-middleware-subrequest reçu d'un client (CVE-2025-29927)
+id: 3f6f2c1e-6b0a-4c55-9d43-2f1c5a7e9b01
+status: experimental
+description: >
+  Détecte une requête HTTP entrante portant l'en-tête interne de Next.js x-middleware-subrequest.
+  Cet en-tête n'est pas destiné aux clients ; sa présence en entrée est une tentative de contournement
+  du middleware (CVE-2025-29927), utilisée entre autres par la campagne React2STEAL. Le contournement
+  efficace utilise UN en-tête dont la valeur répète le nom du middleware cinq fois
+  (middleware:middleware:middleware:middleware:middleware), pas l'en-tête envoyé cinq fois (vérifié en labo).
+  Le champ x_middleware_subrequest suppose un format de journal qui enregistre cet en-tête
+  (le format nginx combined par défaut ne le fait pas).
+references:
+  - https://github.com/vercel/next.js/security/advisories/GHSA-f82v-jwr5-mffw
+  - https://opensourcemalware.com/blog/react2steal-github-actions
+author: Eizi0
+date: 2026-11-23
+tags:
+  - attack.initial-access
+  - attack.t1190
+  - cve.2025-29927
+logsource:
+  category: webserver
+definition: >
+  Journal du proxy ou du serveur web exposé, avec l'en-tête x-middleware-subrequest
+  enregistré dans le champ x_middleware_subrequest.
+detection:
+  selection:
+    x_middleware_subrequest|contains: 'middleware'
+  condition: selection
+falsepositives:
+  - Aucun attendu en entrée d'un proxy exposé. Ne pas appliquer ce journal au trafic interne entre Next.js et lui-même.
+level: high

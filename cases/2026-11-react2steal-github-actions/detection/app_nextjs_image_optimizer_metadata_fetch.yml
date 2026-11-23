@@ -1,0 +1,27 @@
+title: Next.js a tenté de récupérer une adresse de métadonnées cloud comme image
+id: e7b3c5a1-9d2e-4f6b-8c0a-1b4d7e9f2a04
+status: experimental
+description: >
+  Trace laissée côté application quand l'optimiseur d'images a réellement interrogé un service de métadonnées
+  (SSRF aboutie côté réseau, même si le contenu n'a pas été renvoyé au client). Observée en labo sur Next.js 15.2.2
+  avec une configuration images.remotePatterns permissive. Ce message signifie que la requête vers le service
+  est partie : à traiter comme plus grave que le refus en 400 côté proxy.
+references:
+  - https://opensourcemalware.com/blog/react2steal-github-actions
+author: Eizi0
+date: 2026-11-23
+tags:
+  - attack.credential-access
+  - attack.t1552.005
+logsource:
+  category: application
+  product: nextjs
+detection:
+  selection:
+    message|contains|all:
+      - "isn't a valid image for"
+      - '169.254.169.254'
+  condition: selection
+falsepositives:
+  - Aucun attendu.
+level: critical

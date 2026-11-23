@@ -1,0 +1,32 @@
+title: Appel de Server Action Next.js avec un identifiant d'action invalide
+id: c4e1a9d3-7b2f-4e8c-a1d5-6f3b8c2e9d03
+status: experimental
+description: >
+  Un client légitime envoie dans l'en-tête Next-Action l'identifiant de l'action généré à la compilation
+  (42 caractères hexadécimaux sous Next.js 15.2.2, vérifié en labo ; 40 sur des versions plus anciennes).
+  Une valeur hors de ce format (React2STEAL envoie "x") indique un scanner ou une tentative d'exploitation
+  de CVE-2025-55182. La sélection campagne repère en plus la boundary multipart propre à React2STEAL.
+  Suppose un journal qui enregistre les en-têtes Next-Action et Content-Type.
+references:
+  - https://react.dev/blog/2025/12/03/critical-security-vulnerability-in-react-server-components
+  - https://opensourcemalware.com/blog/react2steal-github-actions
+author: Eizi0
+date: 2026-11-23
+tags:
+  - attack.initial-access
+  - attack.t1190
+  - cve.2025-55182
+logsource:
+  category: webserver
+detection:
+  selection_action:
+    method: 'POST'
+    next_action|re: '.+'
+  filter_valid_id:
+    next_action|re: '^[0-9a-f]{40,42}$'
+  selection_campaign:
+    content_type|contains: 'bissa_cve_boundary'
+  condition: (selection_action and not filter_valid_id) or selection_campaign
+falsepositives:
+  - Changement du format des identifiants d'action dans une version future de Next.js (à revalider après mise à jour).
+level: high

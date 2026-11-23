@@ -1,0 +1,32 @@
+title: Optimiseur d'images Next.js pointé vers un service de métadonnées cloud
+id: 8a2d5b7c-1e4f-4f0a-b6c3-5d9e7a1c2b02
+status: experimental
+description: >
+  Détecte une requête vers /_next/image dont le paramètre url vise une adresse de métadonnées cloud
+  (AWS/Azure/GCP 169.254.169.254, AWS IPv6, Alibaba, nom GCP). React2STEAL l'utilise pour tenter de lire
+  le rôle IAM et ses identifiants temporaires. En labo (Next.js 15.2.2), la configuration par défaut refuse
+  l'URL ; avec remotePatterns permissif le serveur interroge bien le service mais ne renvoie pas le contenu.
+references:
+  - https://opensourcemalware.com/blog/react2steal-github-actions
+author: Eizi0
+date: 2026-11-23
+tags:
+  - attack.credential-access
+  - attack.t1552.005
+logsource:
+  category: webserver
+detection:
+  selection_path:
+    uri|contains: '/_next/image'
+  selection_target:
+    uri|contains:
+      - '169.254.169.254'
+      - '169%2E254%2E169%2E254'
+      - 'fd00:ec2::254'
+      - 'fd00%3Aec2%3A%3A254'
+      - '100.100.100.200'
+      - 'metadata.google.internal'
+  condition: all of selection_*
+falsepositives:
+  - Aucun attendu.
+level: high
