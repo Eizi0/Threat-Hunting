@@ -9,6 +9,7 @@ Approche strictement défensive : toute simulation en laboratoire sert à produi
 | Cas | Sujet | Article |
 |---|---|---|
 | [2026-10-cursor-claude-code-2.1.313](cases/2026-10-cursor-claude-code-2.1.313/) | Extension Claude Code piégée servie par la marketplace de Cursor : porte dérobée SSH | [Lire l'article](https://www.jeovany.com/blog/claude-code-cursor-porte-derobee-ssh/) |
+| [2026-11-react2steal-github-actions](cases/2026-11-react2steal-github-actions/) | React2STEAL : scanner sur GitHub Actions qui exploite React2Shell et CVE-2025-29927 sur Next.js et publie les secrets volés | [Lire l'article](https://www.jeovany.com/blog/react2steal-github-actions-nextjs/) |
 
 ## Structure d'un cas
 
