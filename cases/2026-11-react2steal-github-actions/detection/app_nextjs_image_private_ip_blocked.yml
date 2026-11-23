@@ -1,0 +1,28 @@
+title: Next.js 16 bloque une image dont l'hôte résout vers une adresse privée
+id: 4e6b8d19-2a7c-4f3e-8b1d-9c5a7e2f0b09
+status: experimental
+description: >
+  À partir de Next.js 16, l'optimiseur d'images refuse un hôte qui résout vers une adresse privée ou locale,
+  même avec une configuration remotePatterns permissive, et journalise « resolved to private ip ». Vérifié en
+  labo sur 16.0.6 et 16.1.7 : les 7 variantes testées (adresse directe, décimale, hexadécimale, IPv6 mappée,
+  URL encodée, nom DNS vers 169.254.169.254, redirection depuis un hôte autorisé) sont bloquées et journalisées,
+  y compris celles qui échappent aux règles fondées sur l'URL. Tentative bloquée : signal de scan, pas de compromission.
+references:
+  - https://opensourcemalware.com/blog/react2steal-github-actions
+author: Eizi0
+date: 2026-11-23
+tags:
+  - attack.credential-access
+  - attack.t1552.005
+logsource:
+  category: application
+  product: nextjs
+detection:
+  selection:
+    message|contains|all:
+      - 'upstream image'
+      - 'resolved to private ip'
+  condition: selection
+falsepositives:
+  - Application qui sert légitimement des images depuis un hôte interne (configuration à revoir).
+level: medium

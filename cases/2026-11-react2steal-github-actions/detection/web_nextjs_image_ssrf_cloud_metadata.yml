@@ -6,6 +6,9 @@ description: >
   (AWS/Azure/GCP 169.254.169.254, AWS IPv6, Alibaba, nom GCP). React2STEAL l'utilise pour tenter de lire
   le rôle IAM et ses identifiants temporaires. En labo (Next.js 15.2.2), la configuration par défaut refuse
   l'URL ; avec remotePatterns permissif le serveur interroge bien le service mais ne renvoie pas le contenu.
+  LIMITE vérifiée en labo : un nom DNS qui résout vers 169.254.169.254 et une redirection depuis un hôte autorisé
+  atteignent aussi le service sans que l'adresse apparaisse dans l'URL ; seules les règles applicatives
+  (journal Next.js) ou réseau (connexion sortante vers 169.254.169.254) les voient.
 references:
   - https://opensourcemalware.com/blog/react2steal-github-actions
 author: Eizi0
@@ -22,6 +25,10 @@ detection:
     uri|contains:
       - '169.254.169.254'
       - '169%2E254%2E169%2E254'
+      - '%31%36%39%2E%32%35%34'
+      - '2852039166'
+      - '0xa9fea9fe'
+      - 'a9fe:a9fe'
       - 'fd00:ec2::254'
       - 'fd00%3Aec2%3A%3A254'
       - '100.100.100.200'

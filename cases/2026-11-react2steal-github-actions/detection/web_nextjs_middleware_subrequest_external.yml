@@ -7,6 +7,10 @@ description: >
   du middleware (CVE-2025-29927), utilisée entre autres par la campagne React2STEAL. Le contournement
   efficace utilise UN en-tête dont la valeur répète le nom du middleware cinq fois
   (middleware:middleware:middleware:middleware:middleware), pas l'en-tête envoyé cinq fois (vérifié en labo).
+  Toute valeur non vide est retenue : une sonde avec la valeur "x" ne contourne rien mais signale un scanner,
+  et une valeur préfixée ("foo:middleware:...") contourne aussi (vérifié en labo). Le statut 200 ne prouve pas
+  à lui seul le contournement (page de connexion, réécriture, cache) : comparer le contenu ou la taille de la
+  réponse à celle d'une requête sans en-tête.
   Le champ x_middleware_subrequest suppose un format de journal qui enregistre cet en-tête
   (le format nginx combined par défaut ne le fait pas).
 references:
@@ -25,7 +29,7 @@ definition: >
   enregistré dans le champ x_middleware_subrequest.
 detection:
   selection:
-    x_middleware_subrequest|contains: 'middleware'
+    x_middleware_subrequest|re: '.+'
   condition: selection
 falsepositives:
   - Aucun attendu en entrée d'un proxy exposé. Ne pas appliquer ce journal au trafic interne entre Next.js et lui-même.

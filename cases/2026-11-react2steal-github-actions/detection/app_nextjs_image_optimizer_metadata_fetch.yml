@@ -5,7 +5,9 @@ description: >
   Trace laissée côté application quand l'optimiseur d'images a réellement interrogé un service de métadonnées
   (SSRF aboutie côté réseau, même si le contenu n'a pas été renvoyé au client). Observée en labo sur Next.js 15.2.2
   avec une configuration images.remotePatterns permissive. Ce message signifie que la requête vers le service
-  est partie : à traiter comme plus grave que le refus en 400 côté proxy.
+  est partie : à traiter comme plus grave que le refus en 400 côté proxy. Next.js normalise les formes décimale,
+  hexadécimale et encodée de l'adresse dans ce message. LIMITE : un nom DNS ou une redirection laissent dans le
+  message l'URL d'origine, pas l'adresse finale.
 references:
   - https://opensourcemalware.com/blog/react2steal-github-actions
 author: Eizi0
@@ -18,10 +20,12 @@ logsource:
   product: nextjs
 detection:
   selection:
-    message|contains|all:
-      - "isn't a valid image for"
+    message|contains: "isn't a valid image for"
+  selection_target:
+    message|contains:
       - '169.254.169.254'
-  condition: selection
+      - 'a9fe:a9fe'
+  condition: selection and selection_target
 falsepositives:
   - Aucun attendu.
 level: critical

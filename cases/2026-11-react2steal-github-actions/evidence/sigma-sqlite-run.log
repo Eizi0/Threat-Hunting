@@ -1,9 +1,15 @@
 24 événements chargés
 
--- SELECT * FROM logs WHERE message LIKE '%isn''t a valid image for%' ESCAPE '\' AND message LIKE '%169.254.169.2...
+-- SELECT * FROM logs WHERE message LIKE '%isn''t a valid image for%' ESCAPE '\' AND (message LIKE '%169.254.169....
    2 correspondance(s)
     lab-run-exp3.log [next.js]    ⨯ The requested resource isn't a valid image for http://169.254.169.254/latest/meta-data/iam/security-credentials/ received text/html | 
     lab-run-exp3.log [next.js]    ⨯ The requested resource isn't a valid image for http://169.254.169.254/latest/meta-data/iam/security-credentials/lab-role received application/octet-stream | 
+
+-- SELECT * FROM logs WHERE message LIKE '%upstream image%' ESCAPE '\' AND message LIKE '%resolved to private ip%...
+   0 correspondance(s)
+
+-- SELECT * FROM logs WHERE message LIKE '%The Server Reference ID did not match the expected format%' ESCAPE '\'...
+   0 correspondance(s)
 
 -- SELECT * FROM logs WHERE uri LIKE '%/\_next/image%' ESCAPE '\' AND (uri LIKE '%169.254.169.254%' ESCAPE '\' OR...
    4 correspondance(s)
@@ -12,7 +18,7 @@
     lab-run-exp3.log GET /_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
     lab-run-exp3.log GET /_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/lab-role&w=64&q=75 400  | 
 
--- SELECT * FROM logs WHERE x_middleware_subrequest LIKE '%middleware%' ESCAPE '\'...
+-- SELECT * FROM logs WHERE x_middleware_subrequest REGEXP '.+'...
    5 correspondance(s)
     lab-run-1.log GET /admin 307  | middleware
     lab-run-1.log GET /admin 307  | middleware
