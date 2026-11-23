@@ -1,0 +1,40 @@
+== EXP-003 LAB_IMAGES=default ; contrôle direct du faux IMDS :
+HTTP/1.0 200 OK
+Server: SimpleHTTP/0.6 Python/3.11.2
+Date: Mon, 23 Nov 2026 15:02:30 GMT
+Content-type: text/html
+GET /_next/image?url=...security-credentials/ -> 400 
+   corps: "url" parameter is not allowed
+GET /_next/image?url=...security-credentials/lab-role -> 400 
+   corps: "url" parameter is not allowed
+   requêtes reçues par le faux IMDS (hors contrôle direct) : 0
+169.254.169.254 - - [23/Nov/2026 15:02:30] "GET /latest/meta-data/iam/security-credentials/ HTTP/1.1" 200 -
+   Next.js log :
+   journal nginx enrichi :
+{"time":"2026-11-23T15:02:30+00:00","method":"GET","uri":"/_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+{"time":"2026-11-23T15:02:30+00:00","method":"GET","uri":"/_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/lab-role&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+   journal nginx par défaut :
+127.0.0.1 - - [23/Nov/2026:15:02:30 +0000] "GET /_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75 HTTP/1.1" 400 41 "-" "curl/7.88.1"
+127.0.0.1 - - [23/Nov/2026:15:02:30 +0000] "GET /_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/lab-role&w=64&q=75 HTTP/1.1" 400 41 "-" "curl/7.88.1"
+== EXP-003 LAB_IMAGES=permissive ; contrôle direct du faux IMDS :
+HTTP/1.0 200 OK
+Server: SimpleHTTP/0.6 Python/3.11.2
+Date: Mon, 23 Nov 2026 15:02:33 GMT
+Content-type: text/html
+GET /_next/image?url=...security-credentials/ -> 400 
+   corps: The requested resource isn't a valid image.
+GET /_next/image?url=...security-credentials/lab-role -> 400 
+   corps: The requested resource isn't a valid image.
+   requêtes reçues par le faux IMDS (hors contrôle direct) : 2
+169.254.169.254 - - [23/Nov/2026 15:02:33] "GET /latest/meta-data/iam/security-credentials/ HTTP/1.1" 200 -
+169.254.169.254 - - [23/Nov/2026 15:02:33] "GET /latest/meta-data/iam/security-credentials/ HTTP/1.1" 200 -
+169.254.169.254 - - [23/Nov/2026 15:02:33] "GET /latest/meta-data/iam/security-credentials/lab-role HTTP/1.1" 200 -
+   Next.js log :
+ ⨯ The requested resource isn't a valid image for http://169.254.169.254/latest/meta-data/iam/security-credentials/ received text/html
+ ⨯ The requested resource isn't a valid image for http://169.254.169.254/latest/meta-data/iam/security-credentials/lab-role received application/octet-stream
+   journal nginx enrichi :
+{"time":"2026-11-23T15:02:33+00:00","method":"GET","uri":"/_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+{"time":"2026-11-23T15:02:33+00:00","method":"GET","uri":"/_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/lab-role&w=64&q=75","status":400,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+   journal nginx par défaut :
+127.0.0.1 - - [23/Nov/2026:15:02:33 +0000] "GET /_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75 HTTP/1.1" 400 54 "-" "curl/7.88.1"
+127.0.0.1 - - [23/Nov/2026:15:02:33 +0000] "GET /_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/lab-role&w=64&q=75 HTTP/1.1" 400 54 "-" "curl/7.88.1"

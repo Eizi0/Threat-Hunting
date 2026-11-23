@@ -1,0 +1,25 @@
+== clone local : /tmp/fixtures/infected
+  [!] branche suspecte : ci-sync-a1b2c3
+  [!] branche suspecte : wfx-docs
+  [!] fichier marqueur (refs/heads/ci-sync-a1b2c3) : bin/batch_output.py
+  [!] fichier marqueur (refs/heads/ci-sync-a1b2c3) : bin/fast_recon.js
+  [!] fichier marqueur (refs/heads/ci-sync-a1b2c3) : bin/prefilter_nextjs.py
+  [!] fichier marqueur (refs/heads/main) : bin/batch_output.py
+  [!] fichier marqueur (refs/heads/main) : bin/fast_recon.js
+  [!] fichier marqueur (refs/heads/main) : bin/prefilter_nextjs.py
+  [!] fichier marqueur (refs/heads/wfx-docs) : bin/batch_output.py
+  [!] fichier marqueur (refs/heads/wfx-docs) : bin/fast_recon.js
+  [!] fichier marqueur (refs/heads/wfx-docs) : bin/prefilter_nextjs.py
+  [!] fichier marqueur (refs/heads/wfx-docs) : docs/wfx-audit.md
+  [!] commit auteur w@w : 5967d13 w@w chunk
+  [!] message de commit marqueur : 346e4cd ci: sync config
+  [!] message de commit marqueur : 9d3e056 docs: add dependency audit notes
+  [!] message de commit marqueur : 5967d13 chunk
+  [!] workflow qui sérialise tous les secrets : refs/heads/ci-sync-a1b2c3:.github/workflows/sync.yml
+RÉSULTAT : marqueur(s) trouvé(s), traiter le compte comme compromis (révoquer jetons et grants, faire tourner les secrets)
+code de sortie: 1
+
+== clone local : /tmp/fixtures/clean
+RÉSULTAT : aucun marqueur trouvé (ce n'est pas une preuve d'absence de compromission)
+code de sortie: 0
+

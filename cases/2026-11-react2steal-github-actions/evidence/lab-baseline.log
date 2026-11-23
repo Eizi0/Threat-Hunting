@@ -1,0 +1,12 @@
+image locale 200
+ID d'action réel : 406bd75102012bd3eaee8894ca20ece52e3c2ee938 (longueur 42)
+server action légitime 500
+soumission HTML pure 200
+{"time":"2026-11-23T14:56:22+00:00","method":"GET","uri":"/","status":200,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+{"time":"2026-11-23T14:56:22+00:00","method":"GET","uri":"/login","status":200,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+{"time":"2026-11-23T14:56:22+00:00","method":"GET","uri":"/admin","status":200,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+{"time":"2026-11-23T14:56:23+00:00","method":"GET","uri":"/_next/image?url=%2Flogo.png&w=64&q=75","status":200,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+{"time":"2026-11-23T14:56:23+00:00","method":"GET","uri":"/form","status":200,"ua":"curl/7.88.1","content_type":"","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+{"time":"2026-11-23T14:56:23+00:00","method":"POST","uri":"/form","status":500,"ua":"curl/7.88.1","content_type":"text/plain;charset=UTF-8","next_action":"406bd75102012bd3eaee8894ca20ece52e3c2ee938","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+{"time":"2026-11-23T14:56:23+00:00","method":"POST","uri":"/form","status":200,"ua":"curl/7.88.1","content_type":"multipart/form-data; boundary=------------------------f4d8926db258d3f2","next_action":"","x_action_id":"","x_middleware_subrequest":"","transfer_encoding":""}
+save x

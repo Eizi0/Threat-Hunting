@@ -1,0 +1,28 @@
+24 événements chargés
+
+-- SELECT * FROM logs WHERE message LIKE '%isn''t a valid image for%' ESCAPE '\' AND message LIKE '%169.254.169.2...
+   2 correspondance(s)
+    lab-run-exp3.log [next.js]    ⨯ The requested resource isn't a valid image for http://169.254.169.254/latest/meta-data/iam/security-credentials/ received text/html | 
+    lab-run-exp3.log [next.js]    ⨯ The requested resource isn't a valid image for http://169.254.169.254/latest/meta-data/iam/security-credentials/lab-role received application/octet-stream | 
+
+-- SELECT * FROM logs WHERE uri LIKE '%/\_next/image%' ESCAPE '\' AND (uri LIKE '%169.254.169.254%' ESCAPE '\' OR...
+   4 correspondance(s)
+    lab-run-exp3.log GET /_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    lab-run-exp3.log GET /_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/lab-role&w=64&q=75 400  | 
+    lab-run-exp3.log GET /_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/&w=64&q=75 400  | 
+    lab-run-exp3.log GET /_next/image?url=http://169.254.169.254/latest/meta-data/iam/security-credentials/lab-role&w=64&q=75 400  | 
+
+-- SELECT * FROM logs WHERE x_middleware_subrequest LIKE '%middleware%' ESCAPE '\'...
+   5 correspondance(s)
+    lab-run-1.log GET /admin 307  | middleware
+    lab-run-1.log GET /admin 307  | middleware
+    lab-run-1.log GET /admin 200  | middleware:middleware:middleware:middleware:middleware
+    lab-run-1.log GET /admin 307  | src/middleware:src/middleware:src/middleware:src/middleware:src/middleware
+    lab-run-1.log GET /admin 307  | middleware:middleware:middleware:middleware:middleware
+
+-- SELECT * FROM logs WHERE ((method='POST' AND next_action REGEXP '.+') AND (NOT COALESCE((next_action REGEXP '^...
+   3 correspondance(s)
+    lab-run-1.log POST / 500  | x
+    lab-run-1.log POST / 500  | x
+    lab-run-1.log POST / 500  | x
+
