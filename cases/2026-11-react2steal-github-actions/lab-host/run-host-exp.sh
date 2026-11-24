@@ -5,7 +5,7 @@ E=/tmp/r2s-evidence; rm -rf $E; mkdir -p $E
 mark(){ echo "$(date +%s.%N) $1" | tee -a $E/phases.txt; }
 # 1. Trou noir DNS (dnsmasq dédié, résolveur système pointé dessus le temps de l'expérience)
 systemctl stop dnsmasq 2>/dev/null; systemctl disable dnsmasq 2>/dev/null
-UP=$(awk '/^nameserver/{print $2; exit}' /etc/resolv.conf); [ "$UP" = 127.0.0.1 ] && UP=${UPSTREAM_DNS:-9.9.9.9}  # résolveur amont si le système pointe déjà sur la boucle locale
+UP=$(awk '/^nameserver/{print $2; exit}' /etc/resolv.conf); [ "$UP" = 127.0.0.1 ] && UP=${UPSTREAM_DNS:-1.1.1.1}  # résolveur amont si le système pointe déjà sur la boucle locale (pas Quad9 : service arrêté en France en novembre 2026)
 sed "s/UPSTREAM_DNS/$UP/" /tmp/dnsmasq-r2s.conf > /etc/dnsmasq-r2s.conf; : > /var/log/dnsmasq-r2s.log
 pkill -x dnsmasq; dnsmasq -C /etc/dnsmasq-r2s.conf
 cp -n /etc/resolv.conf /etc/resolv.conf.r2s-backup; echo "nameserver 127.0.0.1" > /etc/resolv.conf
